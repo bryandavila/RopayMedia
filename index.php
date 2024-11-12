@@ -1,3 +1,3 @@
 <?php 
-    header("location: View/login.php");
+    header("location: app/View/auth/login.php");
 ?>
