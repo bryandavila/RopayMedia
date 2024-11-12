@@ -1,30 +1,19 @@
-<?php include_once 'layout.php';?>
+<?php include_once '../layout.php';?>
 
 <?php
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
-if (!isset($_SESSION['id'])) {
-    header("Location: login.php");
-    exit();
-}
-$nombreUsuario = isset($_SESSION['nombre']) ? $_SESSION['nombre'] : '';
+    $nombreUsuario = isset($_SESSION['nombre']) ? $_SESSION['nombre'] : '';
 ?>
 
 <!DOCTYPE html>
 <html>
 
-<?php 
-HeadCSS();
-?>
+<?php HeadCSS(); ?>
 
 <body class="d-flex flex-column min-vh-100">
-
 <?php 
-MostrarNav();
-MostrarMenu();
+    MostrarNav();
+    MostrarMenu();
 ?>
-
 <div class="flex-grow-2 mb-5">
 
     <div class="header bg-primary pb-6">
@@ -32,7 +21,7 @@ MostrarMenu();
             <div class="header-body">
                 <div class="row">
                     <div class="col-lg-12 col-md-12">
-                        <h1 class="display-4 text-white">Bienvenido, <?php echo htmlspecialchars($nombreUsuario); ?>!</h1>
+                        <h1 class="display-4 text-white">Bienvenido <?php echo htmlspecialchars($nombreUsuario); ?>!</h1>
                         <p class="text-white">Accede a las diferentes secciones de la tienda Chillyouknow</p>
                     </div>
                 </div>

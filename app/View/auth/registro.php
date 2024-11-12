@@ -1,45 +1,15 @@
 <?php
-include_once '../Controller/registroController.php';
-include_once 'layout.php';
+include_once '../../Controller/AuthController/registroController.php';
+include_once '../layout.php';
 ?>
 
 <!DOCTYPE html>
 <html lang="es">
 
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="Start your development with a Dashboard for Bootstrap 4.">
-    <meta name="author" content="Creative Tim">
-    <link rel="icon" href="assets/img/brand/favicon.png" type="image/png">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700">
-    <link rel="stylesheet" href="assets/vendor/nucleo/css/nucleo.css" type="text/css">
-    <link rel="stylesheet" href="assets/vendor/@fortawesome/fontawesome-free/css/all.min.css" type="text/css">
-    <link rel="stylesheet" href="assets/css/argon.css?v=1.2.0" type="text/css">
-</head>
+<?php HeadAuth(); ?>
 
 <body class="bg-default">
-    <nav id="navbar-main" class="navbar navbar-horizontal navbar-transparent navbar-main navbar-expand-lg navbar-light">
-        <div class="container">
-            <a class="navbar-brand" href="login.php">
-                <img src="assets/img/brand/imagen5.png" style="max-width: 20%; height: auto;">
-            </a>
-            <ul class="navbar-nav mr-auto">
-                <li class="nav-item">
-                    <a href="login.php" class="nav-link">
-                        <span class="nav-link-inner--text">Iniciar Sesión</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="registro.php" class="nav-link">
-                        <span class="nav-link-inner--text">Registrarse</span>
-                    </a>
-                </li>
-            </ul>
-            <hr class="d-lg-none" />
-        </div>
-    </nav>
-
+    <?php navbarLoginRegistro(); ?>
     <div class="main-content">
         <div class="header bg-gradient-primary py-7 py-lg-8 pt-lg-9">
             <div class="container">
@@ -70,22 +40,13 @@ include_once 'layout.php';
                             </div>
                         </div>
                         <div class="card-body px-lg-5 py-lg-5">
-                            <form role="form" method="POST" action="registro.php">
-                                <?php if (isset($error_registro)) : ?>
-                                    <div class="alert alert-danger" role="alert">
-                                        <?php echo $error_registro; ?>
-                                    </div>
-                                <?php elseif (isset($registro_exitoso) && $registro_exitoso): ?>
-                                    <div class="alert alert-success" role="alert">
-                                        <?php echo $mensaje_registro; ?>
-                                    </div>
-                                <?php endif; ?>
+                            <form role="form" method="POST" id="registrarUsuario" >
                                 <div class="form-group mb-3">
                                     <div class="input-group input-group-merge input-group-alternative">
                                         <div class="input-group-prepend">
                                             <span class="input-group-text"><i class="ni ni-circle-08"></i></span>
                                         </div>
-                                        <input class="form-control" placeholder="Nombre" type="text" name="nombre" required>
+                                        <input class="form-control" placeholder="Nombre" type="text" name="nombre" id="nombre" required>
                                     </div>
                                 </div>
                                 <div class="form-group mb-3">
@@ -93,15 +54,7 @@ include_once 'layout.php';
                                         <div class="input-group-prepend">
                                             <span class="input-group-text"><i class="ni ni-circle-08"></i></span>
                                         </div>
-                                        <input class="form-control" placeholder="Apellido" type="text" name="apellido" required>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <div class="input-group input-group-merge input-group-alternative mb-3">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text"><i class="ni ni-email-83"></i></span>
-                                        </div>
-                                        <input class="form-control" placeholder="Correo Electrónico" type="email" name="correo" required>
+                                        <input class="form-control" placeholder="Apellido" type="text" name="apellido" id="apellido" required>
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -109,11 +62,25 @@ include_once 'layout.php';
                                         <div class="input-group-prepend">
                                             <span class="input-group-text"><i class="ni ni-mobile-button"></i></span>
                                         </div>
-                                        <input class="form-control" placeholder="Teléfono" type="text" name="telefono" required>
+                                        <input class="form-control" placeholder="Teléfono" type="text" name="telefono" id="telefono" required>
                                     </div>
                                 </div>
-                                <input type="hidden" name="rol" value="2">
-                                <input type="hidden" name="nombre_rol" value="Usuario">
+                                <div class="form-group">
+                                    <div class="input-group input-group-merge input-group-alternative mb-3">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="ni ni-email-83"></i></span>
+                                        </div>
+                                        <input class="form-control" placeholder="Correo Electrónico" type="email" name="correo" id="correo" required>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="input-group input-group-merge input-group-alternative mb-3">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="ni ni-password-83"></i></span>
+                                        </div>
+                                        <input class="form-control" placeholder="Contraseña" type="password" name="contrasena" id="contrasena" required>
+                                    </div>
+                                </div>
                                 <div class="row my-4">
                                     <div class="col-12">
                                         <div class="custom-control custom-control-alternative custom-checkbox">
@@ -125,7 +92,7 @@ include_once 'layout.php';
                                     </div>
                                 </div>
                                 <div class="text-center">
-                                    <button type="submit" class="btn btn-primary mt-4">Crear cuenta</button>
+                                    <button type="submit" id="saveBtn" class="btn btn-primary mt-4">Crear cuenta</button>
                                 </div>
                             </form>
                         </div>
@@ -137,14 +104,63 @@ include_once 'layout.php';
 
     <?php MostrarFooter(); ?>
 
-    <script src="assets/vendor/jquery/dist/jquery.min.js"></script>
-    <script src="assets/vendor/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="assets/vendor/js-cookie/js.cookie.js"></script>
-    <script src="assets/vendor/jquery.scrollbar/jquery.scrollbar.min.js"></script>
-    <script src="assets/vendor/jquery-scroll-lock/dist/jquery-scrollLock.min.js"></script>
-    <script src="assets/vendor/chart.js/dist/Chart.min.js"></script>
-    <script src="assets/vendor/chart.js/dist/Chart.extension.js"></script>
-    <script src="assets/js/argon.js?v=1.2.0"></script>
+    
+    <script src="../plugins/jquery/jquery.min.js"></script>
+    <script src="../plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="../dist/js/adminlte.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+        $(document).ready(function() {
+            $('#saveBtn').on('click', function(e) {
+                e.preventDefault();
+
+                var formData = new FormData($('#registrarUsuario')[0]);
+
+                $.ajax({
+                    url: '/RopayMedia/app/Controller/AuthController/registroController.php?action=registrarUsuario',
+                    type: 'POST',
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    success: function(response) {
+                        try {
+                            var data = JSON.parse(response);
+                            if (data.success) {
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Éxito',
+                                    text: data.message,
+                                }).then(() => {
+                                    window.location.href = 'login.php'; 
+                                });
+                            } else {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Error',
+                                    text: data.message,
+                                });
+                            }
+                        } catch (e) {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error de respuesta',
+                                text: 'La respuesta no es un JSON válido: ' + response,
+                            });
+                            console.error("Respuesta del servidor:", response);
+                        }
+                    },
+                    error: function() {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'Hubo un error en la solicitud.',
+                        });
+                    }
+                });
+            });
+        });
+    </script>
 </body>
 
 </html>

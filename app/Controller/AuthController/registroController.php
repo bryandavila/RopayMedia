@@ -1,31 +1,37 @@
 <?php
-//Incluir los archivos de configuración y base de datos
-include_once $_SERVER['DOCUMENT_ROOT'] . "/RopayMedia/Model/baseDatosModel.php";
-include_once $_SERVER['DOCUMENT_ROOT'] . "/RopayMedia/Model/registroModel.php";
+    include_once $_SERVER['DOCUMENT_ROOT'] . "/RopayMedia/app/Model/usuarioModel.php";
 
-//Verificar si el formulario fue enviado
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    //Obtener los datos del formulario
-    $nombre = $_POST['nombre'];
-    $apellido = $_POST['apellido'];
-    $correo = $_POST['correo'];
-    $telefono = $_POST['telefono'];
-    $rol = 2;  //El rol por defecto para el usuario registrado
+    class registroController
+    {
+        public static function registrarUsuario()
+        {
+            if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+                $nombre = $_POST['nombre'];
+                $apellido = $_POST['apellido'];
+                $telefono = $_POST['telefono'];
+                $correo = $_POST['correo'];
+                $contrasena = $_POST['contrasena'];
+                $rol = 2;  
 
-    //Validar los datos
-    if (empty($nombre) || empty($apellido) || empty($correo) || empty($telefono)) {
-        $error_registro = "Todos los campos son requeridos.";
-    } else {
-        //Crear el objeto usuario y registrar
-        $usuario = new RegistroModel();
-        $mensaje_registro = $usuario->registrarUsuario($nombre, $apellido, $correo, $telefono, $rol);
+                $usuario = new usuarioModel();
+                $resultado = $usuario->validarCorreo($correo);
 
-        //Asignar mensaje de éxito o error basado en la respuesta del modelo
-        if ($mensaje_registro === "Usuario registrado exitosamente.") {
-            $registro_exitoso = "Cuenta creada exitosamente. Puedes iniciar sesión.";
-        } else {
-            $error_registro = $mensaje_registro;
+                if ($resultado) {
+                    echo json_encode(['success' => false, 'message' => 'Error: El correo ya se encuentra registrado en la aplicación']);
+                } else {
+                    $registrar = $usuario->registrarUsuario($nombre, $apellido, $telefono, $correo, $contrasena, $rol);
+                    if ($registrar) {
+                        echo json_encode(['success' => true, 'message' => 'Cuenta registrada correctamente.']);
+                    } else {
+                        echo json_encode(['success' => false, 'message' => 'Error al registrar la cuenta.']);
+                    }
+                }
+            }
         }
     }
-}
+
+    if (isset($_GET['action']) && $_GET['action'] === 'registrarUsuario') {
+        registroController::registrarUsuario();
+    }
+
 ?>
