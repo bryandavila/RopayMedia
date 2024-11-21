@@ -26,12 +26,15 @@ $usuarios = $usuarioModel->listarUsuarios();
 <html>
 <?php 
 HeadCSS();
+
 ?>
+
 <style>
-     .usuariolist{
+    .usuariolist{
         background-color: #ffffffff;
     }
-    
+
+
 </style>
 <body class="d-flex flex-column min-vh-100">
 
@@ -56,6 +59,7 @@ MostrarMenu();
                 </div>
                 <div class="usuariolist">                                          
                         <?php if (!empty($usuarios)): ?>
+                            <div class="table-responsive">
                             <table class="table table-striped table-hover custom-table text-center">
                                 <thead>
                                     <tr>
@@ -85,6 +89,7 @@ MostrarMenu();
                                     <?php endforeach; ?>
                                 </tbody>
                             </table>
+                            </div>
                         <?php else: ?>
                             <div class="col-lg-12">
                                 <p class="text-white">No hay usuarios disponibles.</p>
@@ -176,8 +181,8 @@ MostrarMenu();
 </div>
 
 <?php MostrarFooter();?>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-<script src="../plugins/jquery/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../plugins/jquery/jquery.min.js"></script>
     <script src="../plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="../dist/js/adminlte.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
