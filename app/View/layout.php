@@ -256,6 +256,7 @@ function HeadCSS()
       <link rel="stylesheet" href="../assets/vendor/nucleo/css/nucleo.css" type="text/css">
       <link rel="stylesheet" href="../assets/vendor/@fortawesome/fontawesome-free/css/all.min.css" type="text/css">
       <link rel="stylesheet" href="../assets/css/argon.css?v=1.2.0" type="text/css">
+      <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
       <style>
         .custom-img {
             height: 400px;

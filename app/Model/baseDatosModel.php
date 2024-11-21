@@ -5,8 +5,8 @@ class Conexion {
     public function conectar() {
         try {
             $servidor = "127.0.0.1";
-            $usuario = "admindb";
-            $password = "123456";
+            $usuario = "root";
+            $password = "132456";
             $baseDatos = "RopayMedia";
             $puerto = "27017";
 
