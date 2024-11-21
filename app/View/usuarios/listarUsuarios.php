@@ -56,7 +56,7 @@ MostrarMenu();
                 </div>
                 <div class="usuariolist">                                          
                         <?php if (!empty($usuarios)): ?>
-                            <table class="table table-striped table-hover custom-table">
+                            <table class="table table-striped table-hover custom-table text-center">
                                 <thead>
                                     <tr>
                                         <th scope="col">Nombre</th>
