@@ -22,7 +22,7 @@
                 <div class="row">
                     <div class="col-lg-12 col-md-12">
                         <h1 class="display-4 text-white">Bienvenido <?php echo htmlspecialchars($nombreUsuario); ?>!</h1>
-                        <p class="text-white">Accede a las diferentes secciones de la tienda Chillyouknow</p>
+                        <p class="text-white">Accede a las diferentes secciones de la tienda Ropa y 1/2</p>
                     </div>
                 </div>
             </div>
@@ -35,8 +35,8 @@
                 <div class="card">
                     <div class="card-body text-center">
                         <h3 class="card-title">Ver los productos por categoria</h3>
-                        <p class="card-text">Podras ver los productos por nuestras 3 categorias.</p>
-                        <a href="categorias.php" class="btn btn-primary">Ir a productos por categoria</a>
+                        <p class="card-text">Podras ver nuestros productos por categorias.</p>
+                        <a href="../categorias/categorias.php" class="btn btn-primary">Ir a productos por categoria</a>
                     </div>
                 </div>
             </div>
@@ -46,7 +46,7 @@
                     <div class="card-body text-center">
                         <h3 class="card-title">Ver todos los productos</h3>
                         <p class="card-text">Podras ver todos los productos de nuestra tienda.</p>
-                        <a href="productos.php" class="btn btn-primary">Ir a todos los productos</a>
+                        <a href="../productos/productos.php" class="btn btn-primary">Ir a todos los productos</a>
                     </div>
                 </div>
             </div>
@@ -54,19 +54,9 @@
             <div class="col-lg-4 col-md-6 mb-4">
                 <div class="card">
                     <div class="card-body text-center">
-                        <h3 class="card-title">Agregar nuevos productos</h3>
-                        <p class="card-text">Podras agregar nuevos productos a la tienda.</p>
-                        <a href="productos_crud.php" class="btn btn-primary">Ir a agregar productos</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-lg-4 col-md-6 mb-4">
-                <div class="card">
-                    <div class="card-body text-center">
-                        <h3 class="card-title">Actualizar los productos</h3>
-                        <p class="card-text">Podras actualizar todos los productos de la tienda.</p>
-                        <a href="productos_actualizar.php" class="btn btn-primary">Ir a actualizar los productos</a>
+                        <h3 class="card-title">Agregar y actualizar productos</h3>
+                        <p class="card-text">Podras agregar y actualizar productos en la tienda.</p>
+                        <a href="../productos/productosCrud.php" class="btn btn-primary">Ir a gestión de productos</a>
                     </div>
                 </div>
             </div>

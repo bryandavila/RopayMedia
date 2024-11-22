@@ -63,13 +63,13 @@ function MostrarNav()
                         </h6>
                         <ul class="navbar-nav">
                             <li class="nav-item">
-                                <a class="nav-link" href="#">
+                                <a class="nav-link" href="../categorias/categorias.php">
                                     <i class="ni ni-bullet-list-67 text-primary"></i>
                                     <span class="nav-link-text">Productos por categorías</span>
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="#">
+                                <a class="nav-link" href="../productos/productos.php">
                                     <i class="ni ni-box-2 text-primary"></i>
                                     <span class="nav-link-text">Todos los productos</span>
                                 </a>
@@ -77,13 +77,13 @@ function MostrarNav()
                             if ($rol == 1) {
                                 echo '
                                 <li class="nav-item">
-                                    <a class="nav-link" href="#">
+                                    <a class="nav-link" href="../productos/productosCrud.php">
                                         <i class="ni ni-box-2 text-primary"></i>
                                         <span class="nav-link-text">Agregar un producto</span>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="#">
+                                    <a class="nav-link" href="../productos/listaProductos.php">
                                         <i class="ni ni-box-2 text-primary"></i>
                                         <span class="nav-link-text">Lista de productos</span>
                                     </a>
@@ -98,13 +98,13 @@ function MostrarNav()
                             </h6>
                             <ul class="navbar-nav">
                                 <li class="nav-item">
-                                    <a class="nav-link" href="#">
+                                    <a class="nav-link" href="../categorias/categoriasCrud.php">
                                         <i class="ni ni-bullet-list-67 text-primary"></i>
                                         <span class="nav-link-text">Crear categoría</span>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="#">
+                                    <a class="nav-link" href="../categorias/listaCategorias.php">
                                         <i class="ni ni-bullet-list-67 text-primary"></i>
                                         <span class="nav-link-text">Lista de categoías</span>
                                     </a>
@@ -250,7 +250,7 @@ function HeadCSS()
       <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
       <meta name="description" content="Start your development with a Dashboard for Bootstrap 4.">
       <meta name="author" content="Creative Tim">
-      <title>ChillYouKnow</title>
+      <title>Ropa y 1/2</title>
       <link rel="icon" href="../assets/img/brand/favicon.png" type="image/png">
       <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700">
       <link rel="stylesheet" href="../assets/vendor/nucleo/css/nucleo.css" type="text/css">
