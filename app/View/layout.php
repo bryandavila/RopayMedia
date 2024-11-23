@@ -155,13 +155,13 @@ function MostrarNav()
                             </h6>
                             <ul class="navbar-nav">
                                 <li class="nav-item">
-                                    <a class="nav-link" href="../facturas/facturasCrud.php">
+                                    <a class="nav-link" href="#">
                                         <i class="ni ni-bullet-list-67 text-primary"></i>
                                         <span class="nav-link-text">Crear factura</span>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="../facturas/listaFacturas.php">
+                                    <a class="nav-link" href="#">
                                         <i class="ni ni-bullet-list-67 text-primary"></i>
                                         <span class="nav-link-text">Lista de facturas</span>
                                     </a>
