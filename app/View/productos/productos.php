@@ -2,21 +2,14 @@
 include_once 'layout.php';
 include_once '../Model/productos_model.php';
 
-<<<<<<< Updated upstream
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
-=======
-
-$productoController = new ProductoController();
-$categoriaController = new CategoriaController();
->>>>>>> Stashed changes
 
 if (!isset($_SESSION['carrito'])) {
     $_SESSION['carrito'] = [];
 }
 
-<<<<<<< Updated upstream
 if (!isset($_SESSION['id'])) {
     header("Location: login.php");
     exit();
@@ -30,9 +23,6 @@ if (isset($_GET['categoria'])) {
 } else {
     $productos = obtenerTodosLosProductos();
 }
-=======
-
->>>>>>> Stashed changes
 ?>
 
 
@@ -49,7 +39,6 @@ MostrarNav();
 MostrarMenu();
 ?>
 
-<<<<<<< Updated upstream
 <div class="container">
     <div class="position-fixed" style="top: 0; left: 50%; transform: translateX(-50%); z-index: 1050;">
         <div class="card" style="max-width: 350px;">
@@ -130,45 +119,6 @@ MostrarMenu();
             </div>
         </div>
     </div>
-=======
-<div class="container mt-5">
-    <h1 class="text-center mb-4">Todos los productos</h1>
-
-    <?php if (empty($productos)): ?>
-        <div class="alert alert-warning text-center">
-            <strong>No hay productos disponibles en este momento.</strong>
-        </div>
-    <?php else: ?>
-        <div class="row">
-                        <?php foreach ($productos as $producto): ?>
-                            <div class="col-lg-4 col-md-6 mb-4 d-flex align-items-stretch">
-                            <div class="card h-100"  style="width: 18rem;">
-                                    <img src="<?php echo htmlspecialchars($producto['ruta_imagen']); ?>" 
-                                    class="card-img-top" 
-
-                                         alt="<?php echo htmlspecialchars($producto['nombre_producto']); ?>"
-                                         style="object-fit: cover; height: 250px;">
-                                         <div class="card-body d-flex flex-column">
-                                        <h5 class="card-title"><?php echo htmlspecialchars($producto['nombre_producto']); ?></h5>
-                                        <p class="card-text text-muted"><?php echo htmlspecialchars($producto['descripcion']); ?></p>
-                                        <p class="card-text mt-auto">
-                                            <strong>Precio:</strong> ₡<?php echo number_format($producto['precio'], 2); ?><br>
-                                            <strong>Stock:</strong> <?php echo $producto['stock']; ?>
-                                        </p>
-                                    </div>
-                                    
-                                    <div class="card-footer">
-                                        <form method="POST" action="carrito.php">
-                                            <input type="hidden" name="id_producto" value="<?php echo $producto['id_producto']; ?>">
-                                            <button type="submit" class="btn btn-success btn-block">Añadir al carrito</button>
-                                            </form>
-                        </div>
-                    </div>       
-                </div>
-            <?php endforeach; ?>
-        </div>
-    <?php endif; ?>
->>>>>>> Stashed changes
 </div>
 
 <?php MostrarFooter(); ?>
@@ -184,7 +134,3 @@ MostrarMenu();
 </body>
 
 </html>
-<<<<<<< Updated upstream
-=======
-
->>>>>>> Stashed changes
