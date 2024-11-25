@@ -64,6 +64,7 @@ class ProductoController {
         }
     }
 
+
     public function manejarAcciones() {
         $accion = isset($_POST['accion']) ? $_POST['accion'] : '';
         $idProducto = isset($_POST['id_producto']) ? $_POST['id_producto'] : null;
@@ -81,4 +82,8 @@ class ProductoController {
             exit();
         }
     }
+    public function listarProductosPorCategoria($idCategoria) {
+        return $this->productoModel->obtenerProductosPorCategoria($idCategoria); // Obtener productos filtrados por categoría
+    }
+
 }

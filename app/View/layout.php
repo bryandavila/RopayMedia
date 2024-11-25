@@ -155,13 +155,13 @@ function MostrarNav()
                             </h6>
                             <ul class="navbar-nav">
                                 <li class="nav-item">
-                                    <a class="nav-link" href="#">
+                                    <a class="nav-link" href="../facturas/facturasCrud.php">
                                         <i class="ni ni-bullet-list-67 text-primary"></i>
                                         <span class="nav-link-text">Crear factura</span>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="#">
+                                    <a class="nav-link" href="../facturas/listaFacturas.php">
                                         <i class="ni ni-bullet-list-67 text-primary"></i>
                                         <span class="nav-link-text">Lista de facturas</span>
                                     </a>
@@ -222,13 +222,13 @@ function MostrarNav()
                         </h6>
                         <ul class="navbar-nav">
                             <li class="nav-item">
-                                <a class="nav-link" href="#">
+                                <a class="nav-link" href="../categorias/categorias.php">
                                     <i class="ni ni-bullet-list-67 text-primary"></i>
                                     <span class="nav-link-text">Productos por categorías</span>
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="#">
+                                <a class="nav-link" href="../productos/productos.php">
                                     <i class="ni ni-box-2 text-primary"></i>
                                     <span class="nav-link-text">Todos los productos</span>
                                 </a>

@@ -43,7 +43,7 @@ MostrarMenu();
                             <div class="card-body">
                                 <h5 class="card-title text-primary"><?php echo htmlspecialchars($categoria['nombre_categoria']); ?></h5>
                                 <p class="card-text text-muted">Descubra los productos de esta categoría.</p>
-                                <a href="productos.php?categoria=<?php echo $categoria['id_categoria']; ?>" class="btn btn-primary">Ver productos</a>
+                                <a href="../productos/productos.php?categoria=<?php echo $categoria['id_categoria']; ?>" class="btn btn-primary">Ver productos</a>
                             </div>
                         </div>
                     </div>

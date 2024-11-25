@@ -118,5 +118,36 @@ class ProductoModel {
             return false;
         }
     }
-}
+    public function obtenerProductosPorCategoria($idCategoria) {
+        try {
+            $db = $this->conexion->conectar();
+            if ($db === null) {
+                return [];
+            }
+    
+            $productosCollection = $db->productos;
+            $productos = $productosCollection->find(['id_categoria' => (int)$idCategoria]); // Filtrar por categoría
+    
+            // Convertir el cursor de MongoDB a un array asociativo
+            $listaProductos = [];
+            foreach ($productos as $producto) {
+                $listaProductos[] = [
+                    'id_producto' => $producto['id_producto'],
+                    'nombre_producto' => $producto['nombre_producto'],
+                    'descripcion' => $producto['descripcion'],
+                    'precio' => $producto['precio'],
+                    'stock' => $producto['stock'],
+                    'id_categoria' => $producto['id_categoria'],
+                    'ruta_imagen' => $producto['ruta_imagen']
+                ];
+            }
+    
+            return $listaProductos;
+        } catch (\Exception $e) {
+            return [];
+        }
+    }
+    }
+    
+ 
 ?>
