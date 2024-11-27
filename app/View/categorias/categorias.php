@@ -1,20 +1,9 @@
-<?php 
-include_once 'layout.php';
-include_once '../Model/categorias_model.php';
-
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
-
-if (!isset($_SESSION['id'])) {
-    header("Location: login.php");
-    exit();
-}
-
+<?php
+require_once $_SERVER['DOCUMENT_ROOT'] . "/RopayMedia/app/Controller/CategoriaController/categoriaController.php";
+include_once '../layout.php';
 $nombreUsuario = isset($_SESSION['nombre']) ? $_SESSION['nombre'] : '';
-
-$categorias = obtenerCategorias();
-
+$categoriaController = new CategoriaController();
+$categorias = $categoriaController->listarCategorias();
 ?>
 
 <!DOCTYPE html>
@@ -41,27 +30,27 @@ MostrarMenu();
                         <p class="text-white">Seleccione una categoría para ver los productos disponibles.</p>
                     </div>
                 </div>
-            </div> 
+            </div>
         </div>
-    </div>   
-    
+    </div>
+
     <div class="container my-5">
         <div class="row justify-content-center">
             <?php if (!empty($categorias)): ?>
                 <?php foreach ($categorias as $categoria): ?>
                     <div class="col-lg-4 col-md-6 mb-4">
-                        <div class="card text-center">
+                        <div class="card text-center shadow-sm">
                             <div class="card-body">
-                                <h5 class="card-title"><?php echo htmlspecialchars($categoria['NOMBRE_CATEGORIA']); ?></h5>
-                                <p class="card-text"><?php echo htmlspecialchars($categoria['DESCRIPCION']); ?></p>
-                                <a href="productos.php?categoria=<?php echo $categoria['ID_CATEGORIA']; ?>" class="btn btn-primary">Ver Productos</a>
+                                <h5 class="card-title text-primary"><?php echo htmlspecialchars($categoria['nombre_categoria']); ?></h5>
+                                <p class="card-text text-muted">Descubra los productos de esta categoría.</p>
+                                <a href="../productos/productos.php?categoria=<?php echo $categoria['id_categoria']; ?>" class="btn btn-primary">Ver productos</a>
                             </div>
                         </div>
                     </div>
                 <?php endforeach; ?>
             <?php else: ?>
                 <div class="col-lg-12 text-center">
-                    <p class="text-white">No hay categorías disponibles.</p>
+                    <p class="text-muted">No hay categorías disponibles.</p>
                 </div>
             <?php endif; ?>
         </div>

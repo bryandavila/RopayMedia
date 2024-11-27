@@ -32,6 +32,7 @@
                 $usuariosCollection = $db->usuarios; 
                 $password_hash = password_hash($contrasena, PASSWORD_DEFAULT); 
                 $nuevoUsuario = [
+                    'id_usuario' => time(),
                     'nombre' => $nombre,
                     'apellido' => $apellido,
                     'telefono' => $telefono,
