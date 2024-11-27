@@ -134,7 +134,13 @@ function MostrarNav()
                                 <li class="nav-item">
                                     <a class="nav-link" href="#">
                                         <i class="ni ni-bullet-list-67 text-primary"></i>
-                                        <span class="nav-link-text">Pendientes</span>
+                                        <span class="nav-link-text">En validación</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#">
+                                        <i class="ni ni-bullet-list-67 text-primary"></i>
+                                        <span class="nav-link-text">En la tienda</span>
                                     </a>
                                 </li>
                                 <li class="nav-item">
@@ -253,15 +259,9 @@ function HeadCSS()
       <title>Ropa y 1/2</title>
       <link rel="icon" href="../assets/img/brand/favicon.png" type="image/png">
       <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700">
-      <link rel="stylesheet" href="../assets/vendor/nucleo/css/nucleo.css" type="text/css">
       <link rel="stylesheet" href="../assets/vendor/@fortawesome/fontawesome-free/css/all.min.css" type="text/css">
       <link rel="stylesheet" href="../assets/css/argon.css?v=1.2.0" type="text/css">
-      <style>
-        .custom-img {
-            height: 400px;
-            object-fit: cover;
-        }
-      </style>
+      <link rel="stylesheet" href="../dist/css/styles.css">
     </head>';
 }
 
