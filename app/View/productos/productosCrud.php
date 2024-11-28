@@ -8,10 +8,11 @@ include_once '../layout.php';
 $productoController = new ProductoController();
 $categoriaController = new CategoriaController();
 
-if (isset($_GET['id_producto'])) {
-    $producto = $productoController->buscarProductoPorId($_GET['id_producto']);
-    echo json_encode($producto);
-    exit();
+if (isset($_GET['id_producto']) && !empty($_GET['id_producto'])) {
+    $productoId = $_GET['id_producto'];
+    $producto = $productoController->buscarProductoPorId($productoId);
+} else {
+    $producto = null; // Si no hay ID, no buscar el producto
 }
 
 $productoController->manejarAcciones(); // Manejar acciones de crear, actualizar o eliminar productos
@@ -128,17 +129,27 @@ MostrarMenu();
                     url: 'productosCrud.php',
                     data: { id_producto: productoId },
                     success: function(response) {
-                        var producto = JSON.parse(response);
-                        $('#nombre_producto').val(producto.nombre_producto);
-                        $('#descripcion').val(producto.descripcion);
-                        $('#precio').val(producto.precio);
-                        $('#stock').val(producto.stock);
-                        $('#id_categoria').val(producto.id_categoria);
-                        $('#ruta_imagen').val(producto.ruta_imagen);
+                        try {
+                            var producto = JSON.parse(response);
+                            if (producto && producto.id_producto) {
+                                $('#nombre_producto').val(producto.nombre_producto);
+                                $('#descripcion').val(producto.descripcion);
+                                $('#precio').val(producto.precio);
+                                $('#stock').val(producto.stock);
+                                $('#id_categoria').val(producto.id_categoria);
+                                $('#ruta_imagen').val(producto.ruta_imagen);
+                            } else {
+                                alert('Producto no encontrado');
+                            }
+                        } catch (e) {
+                            console.error('Error al procesar la respuesta del servidor:', e);
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error en la solicitud:', error);
                     }
                 });
             } else {
-                // Limpiar el formulario si no se selecciona un producto
                 $('#productoForm')[0].reset();
             }
         });

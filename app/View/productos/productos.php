@@ -8,7 +8,7 @@ include_once '../layout.php';
 $productoController = new ProductoController();
 $categoriaController = new CategoriaController();
 
-$idCategoria = isset($_GET['categoria']) ? intval($_GET['categoria']) : null;
+$idCategoria = isset($_GET['categoria']) ? $_GET['categoria'] : null;
 
 // Verificar si se seleccionó una categoría
 if ($idCategoria !== null) {
@@ -42,7 +42,9 @@ HeadCSS();
         </a>
     </div>
     <div class="container mt-5">
-        <h1 class="text-center mb-4">Todos los productos</h1>
+        <h1 class="text-center mb-4">
+            <?php echo $idCategoria ? "Productos por categoría" : "Todos los productos"; ?>
+        </h1>
 
         <?php if (empty($productos)): ?>
             <div class="alert alert-warning text-center">
@@ -66,13 +68,13 @@ HeadCSS();
                             </div>
                             <div class="card-footer">
                                 <form method="POST" action="/RopayMedia/app/Controller/CarritoComprasController/carrito_controller.php?action=agregarAlCarrito">
-                                        <input type="hidden" name="id_producto" value="<?php echo $producto['id_producto']; ?>">
-                                        <input type="hidden" name="img" value="<?php echo htmlspecialchars($producto['ruta_imagen']); ?>">
-                                        <input type="hidden" name="nombre" value="<?php echo htmlspecialchars($producto['nombre_producto']); ?>">
-                                        <input type="hidden" name="precio" value="<?php echo number_format($producto['precio'], 2, '.', ''); ?>">
-                                        <input type="hidden" name="stock" value="<?php echo $producto['stock']; ?>">
-                                        <button type="submit" class="btn btn-success btn-block">Añadir al carrito</button>
-                                    </form>
+                                    <input type="hidden" name="id_producto" value="<?php echo $producto['id_producto']; ?>">
+                                    <input type="hidden" name="img" value="<?php echo htmlspecialchars($producto['ruta_imagen']); ?>">
+                                    <input type="hidden" name="nombre" value="<?php echo htmlspecialchars($producto['nombre_producto']); ?>">
+                                    <input type="hidden" name="precio" value="<?php echo number_format($producto['precio'], 2, '.', ''); ?>">
+                                    <input type="hidden" name="stock" value="<?php echo $producto['stock']; ?>">
+                                    <button type="submit" class="btn btn-success btn-block">Añadir al carrito</button>
+                                </form>
                                 <button type="button" class="btn btn-info btn-block mt-2" data-toggle="collapse" 
                                         data-target="#detalle-<?php echo $producto['id_producto']; ?>" 
                                         aria-expanded="false" 
@@ -84,7 +86,7 @@ HeadCSS();
                             <div id="detalle-<?php echo $producto['id_producto']; ?>" 
                                 class="collapse position-absolute w-100" 
                                 style="z-index: 10; background-color: white; border: 1px solid #ddd; padding: 15px;">
-                                <h5>Descripción del Producto</h5>
+                                <h5>Descripción del producto</h5>
                                 <p><?php echo htmlspecialchars($producto['descripcion']); ?></p>
                                 <button type="button" class="btn btn-secondary btn-block" data-toggle="collapse" 
                                         data-target="#detalle-<?php echo $producto['id_producto']; ?>">
