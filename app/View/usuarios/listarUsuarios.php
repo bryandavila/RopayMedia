@@ -19,8 +19,7 @@ $nombreUsuario = isset($_SESSION['nombre']) ? $_SESSION['nombre'] : '';
 
 $usuarioModel = new UsuarioModel();
 $usuarios = $usuarioModel->listarUsuarios();
-#print_r($usuarios);
-#die();
+
 ?>
 <!DOCTYPE html>
 <html>
@@ -63,6 +62,7 @@ MostrarMenu();
                             <table class="table table-striped table-hover custom-table text-center">
                                 <thead>
                                     <tr>
+                                       <th scope="col">ID</th>
                                         <th scope="col">Nombre</th>
                                         <th scope="col">Apellido</th>
                                         <th scope="col">Teléfono</th>
@@ -75,6 +75,7 @@ MostrarMenu();
                                 <tbody>
                                     <?php foreach ($usuarios as $usuario): ?> 
                                         <tr>
+                                        <td><?= htmlspecialchars($usuario['_id']); ?></td>
                                             <td><?= htmlspecialchars($usuario['nombre']); ?></td>
                                             <td><?= htmlspecialchars($usuario['apellido']); ?></td>
                                             <td><?= htmlspecialchars($usuario['telefono']); ?></td>

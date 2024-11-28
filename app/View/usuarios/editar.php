@@ -27,6 +27,7 @@ $usuario = $usuarioModel->editarUsuario($_GET['id']);
 <html>
 <?php 
 HeadCSS();
+
 ?>
 <style>
      #container{
@@ -38,6 +39,7 @@ HeadCSS();
 <?php 
 MostrarNav();
 MostrarMenu();
+print_r($_GET);
 ?>
 <div class="container mt-4">
     <form role="form" method="POST" id="editarUsuario">
@@ -47,7 +49,7 @@ MostrarMenu();
                
                 <div class="mb-3">
                     <label for="nombre" class="form-label">Nombre</label>
-                    <input type="text" class="form-control" id="nombre" name="nombre" value="<?= htmlspecialchars($usuario['nombre']); ?>" >
+                    <input type="text" class="form-control" id="nombre" name="nombre" value="<?= $usuario['nombre']; ?>" >
                 </div>
 
                 <div class="mb-3">

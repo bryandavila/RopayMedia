@@ -1,15 +1,16 @@
 <?php
+session_start();
+
+require_once $_SERVER['DOCUMENT_ROOT'] . "/RopayMedia/app/Controller/FacturaController/facturas_controller.php";
 include_once '../layout.php';
-include_once '../../Controller/ReporteController/reporteController.php';
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
 
+$facturaController = new FacturaController();
+$facturas = $facturaController->listarFacturas(); 
 
-$nombreUsuario = isset($_SESSION['nombre']) ? $_SESSION['nombre'] : '';
-
+$mensaje = isset($_SESSION['mensaje']) ? $_SESSION['mensaje'] : '';
+$tipo = isset($_SESSION['tipo']) ? $_SESSION['tipo'] : 'success';
+unset($_SESSION['mensaje'], $_SESSION['tipo']); 
 ?>
-
 
 <!DOCTYPE html>
 <html>

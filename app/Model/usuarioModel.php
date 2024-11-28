@@ -22,6 +22,29 @@
                 return "Error: " . $e->getMessage();
             }
         }
+        public function obtenerSiguienteID() {
+            try {
+                
+                $db = $this->conexion->conectar();   
+                $secuenciasCollection = $db->secuencias;
+                $resultado = $secuenciasCollection->findOne(['_id' => 'usuarios']);
+                
+                if ($resultado === null) {
+                    throw new Exception("No se encontró el documento de secuencias.");
+                }
+                
+                $idactual = $resultado['valor'];  
+    
+                $secuenciasCollection->updateOne(
+                    ['_id' => 'usuarios'],  
+                    ['$inc' => ['valor' => 1]]  
+                );
+                
+                return $idactual;  
+            } catch (Exception $e) {
+                die("Error al obtener el siguiente ID: " . $e->getMessage());
+            }
+        }
 
         public function registrarUsuario($nombre, $apellido, $telefono, $correo, $contrasena, $id_rol) {
             try {
@@ -29,9 +52,12 @@
                 if ($db === null) {
                     return "Error al conectar a la base de datos.";
                 }
+                $siguienteID = $this->obtenerSiguienteID();
                 $usuariosCollection = $db->usuarios; 
                 $password_hash = password_hash($contrasena, PASSWORD_DEFAULT); 
+                
                 $nuevoUsuario = [
+                    '_id' => $siguienteID,
                     'nombre' => $nombre,
                     'apellido' => $apellido,
                     'telefono' => $telefono,
@@ -100,13 +126,13 @@
                 if ($db === null) {
                     return "Error al conectar a la base de datos.";
                 }
-        
-                $objectId = new MongoDB\BSON\ObjectId($id);
-        
+                
+                //$objectId = new MongoDB\BSON\ObjectId($id);
+                $id = (int) $id;
                 $usuariosCollection = $db->usuarios;
                 $rolesCollection = $db->roles;
         
-                $usuario = $usuariosCollection->findOne(['_id' => $objectId]);
+                $usuario = $usuariosCollection->findOne(['_id' => $id]);
                 if (!$usuario) {
                     return "No se encontró ningún usuario con el ID proporcionado.";
                 }
@@ -128,9 +154,9 @@
                 if ($db === null) {
                     return "Error al conectar a la base de datos.";
                 }
-        
-                $objectId = new MongoDB\BSON\ObjectId($id);
-        
+                
+                //$objectId = new MongoDB\BSON\ObjectId($id);
+                $id = (int) $id;
                 $usuariosCollection = $db->usuarios;
                if (strlen ($contrasena)>40){
                 $password_hash=$contrasena;
@@ -148,7 +174,7 @@
                 ];
         
                 $resultado = $usuariosCollection->updateOne(
-                    ['_id' => $objectId], 
+                    ['_id' => $id], 
                     ['$set' => $actualizarUsuario] 
                 );
         
@@ -168,12 +194,11 @@
                 if ($db === null) {
                     return "Error al conectar a la base de datos.";
                 }
-        
-                $objectId = new MongoDB\BSON\ObjectId($id); 
-                
+                //$objectId = new MongoDB\BSON\ObjectId($id); 
+                $id = (int) $id;
                 $usuariosCollection = $db->usuarios;
         
-                $resultado = $usuariosCollection->deleteOne(['_id' => $objectId]);
+                $resultado = $usuariosCollection->deleteOne(['_id' => $id]);
         
                 if ($resultado->getDeletedCount() > 0) {
                     return true; 

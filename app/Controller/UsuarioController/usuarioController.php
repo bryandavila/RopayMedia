@@ -4,15 +4,17 @@
     class usuarioController
     {
        
+      
         public static function registrarUsuario()
         {
-            
+           
             if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 $nombre = $_POST['nombre'];
                 $apellido = $_POST['apellido'];
                 $telefono = $_POST['telefono'];
                 $correo = $_POST['correo'];
                 $contrasena = $_POST['contrasena'];
+               
                 if (isset($_POST['rol']) && $_POST['rol'] == '1') {
                     $rol = 1; 
                 } else {
@@ -26,6 +28,7 @@
                     echo json_encode(['success' => false, 'message' => 'Error: El correo ya se encuentra registrado en la aplicación']);
                 
                 } else {
+                    
                     $registrar = $usuario->registrarUsuario($nombre, $apellido, $telefono, $correo, $contrasena, $rol);
                     if ($registrar) {
                         echo json_encode(['success' => true, 'message' => 'Cuenta registrada correctamente.']);
