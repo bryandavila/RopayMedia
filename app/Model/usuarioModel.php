@@ -127,7 +127,6 @@
                     return "Error al conectar a la base de datos.";
                 }
                 
-                //$objectId = new MongoDB\BSON\ObjectId($id);
                 $id = (int) $id;
                 $usuariosCollection = $db->usuarios;
                 $rolesCollection = $db->roles;
@@ -155,7 +154,6 @@
                     return "Error al conectar a la base de datos.";
                 }
                 
-                //$objectId = new MongoDB\BSON\ObjectId($id);
                 $id = (int) $id;
                 $usuariosCollection = $db->usuarios;
                if (strlen ($contrasena)>40){
@@ -194,7 +192,7 @@
                 if ($db === null) {
                     return "Error al conectar a la base de datos.";
                 }
-                //$objectId = new MongoDB\BSON\ObjectId($id); 
+                
                 $id = (int) $id;
                 $usuariosCollection = $db->usuarios;
         
