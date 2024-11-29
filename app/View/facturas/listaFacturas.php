@@ -59,8 +59,8 @@ MostrarMenu();
                             <td><?php echo $index + 1; ?></td>
                             <td>
                                 <?php 
-                                echo isset($factura['id_cliente']) 
-                                    ? htmlspecialchars($factura['id_cliente']) 
+                                echo isset($factura['id_usuario']) 
+                                    ? htmlspecialchars($factura['id_usuario']) 
                                     : 'Cliente no disponible'; 
                                 ?>
                             </td>

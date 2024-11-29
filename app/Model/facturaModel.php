@@ -30,9 +30,10 @@
                             }
                                                 
                             $listaFacturas[] = [
-                                'id_factura' => isset($factura['id_factura']) ? (int)$factura['id_factura'] : null,
-                                'id_pedido' => isset($factura['id_pedido']) ? (int)$factura['id_pedido'] : null, // Verificar existencia
-                                'id_cliente' => isset($factura['id_cliente']) ? (int)$factura['id_cliente'] : null, // Verificar existencia
+                                'id_factura' => isset($factura['id_factura']) && $factura['id_factura'] instanceof MongoDB\BSON\ObjectId ? (string)$factura['id_factura'] : (int)$factura['id_factura'],
+                                'id_pedido' => isset($factura['id_pedido']) && $factura['id_pedido'] instanceof MongoDB\BSON\ObjectId
+                                ? (string)$factura['id_pedido'] : (int)$factura['id_pedido'], 
+                                'id_usuario' => isset($factura['id_usuario']) ? (int)$factura['id_usuario'] : null, // Verificar existencia
                                 'productos' => isset($factura['productos']) ? $factura['productos'] : [], // Solo IDs de productos
                                 'total' => isset($factura['total']) ? (float)$factura['total'] : null, // Verificar existencia
                                 'fecha_emision' => $fechaEmision,
@@ -101,8 +102,12 @@
             if ($factura) {
                 return [
                     'id_factura' => isset($factura['id_factura']) ? (int)$factura['id_factura'] : null, // Verificar existencia
-                    'id_cliente' => isset($factura['id_cliente']) ? $factura['id_cliente'] : null,
-                    'id_pedido' => isset($factura['id_pedido']) ? $factura['id_pedido'] : null, // Verificar existencia
+                    'id_usuario' => isset($factura['id_usuario']) ? $factura['id_usuario'] : null,
+                    'id_pedido' => isset($factura['id_pedido']) ? 
+                    (is_object($factura['id_pedido']) && $factura['id_pedido'] instanceof MongoDB\BSON\ObjectId 
+                        ? (string)$factura['id_pedido']  // Convertir ObjectId a string
+                        : $factura['id_pedido']) 
+                    : null, 
                     'productos' => isset($factura['productos']) ? $factura['productos'] : [], // Verificar existencia
                     'fecha_emision' => isset($factura['fecha_emision']) && $factura['fecha_emision'] instanceof MongoDB\BSON\UTCDateTime
                         ? $factura['fecha_emision']->toDateTime()->format('Y-m-d H:i:s') // Convertir a cadena legible

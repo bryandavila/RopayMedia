@@ -77,7 +77,7 @@
                 $id_factura = time();
                 $nuevaFactura = [
                     'id_factura' => $id_factura,
-                    'id_cliente' => $id_usuario,
+                    'id_usuario' => $id_usuario,
                     'id_pedido' => $id_pedido,
                     'productos' => $productos,
                     'total' => $total,
@@ -120,6 +120,38 @@
                 return "Error: " . $e->getMessage();
             }
         }
-        
+        public function crearFactura($id_usuario, $id_pedido, $productos, $total)
+        {
+            try {
+                $db = $this->conexion->conectar(); 
+                if ($db === null) {
+                    throw new Exception("Error al conectar a la base de datos.");
+                }
+                $facturasCollection = $db->facturas; 
+
+                $id_factura = time();
+                $nuevaFactura = [
+                    'id_factura' => $id_factura,
+                    'id_usuario' => $id_usuario,
+                    'id_pedido' => $id_pedido,
+                    'productos' => $productos,
+                    'total' => $total,
+                    'fecha_emision' => (new DateTime())->format('Y-m-d H:i:s'),
+                    'detalle' => 'Factura generada tras la aceptación de un pedido.',
+                ];
+
+              
+                $resultado = $facturasCollection->insertOne($nuevaFactura);
+
+                if ($resultado->getInsertedCount() > 0) {
+                    return $id_factura;
+                } else {
+                    throw new Exception("Error al generar la factura.");
+                }
+            } catch (Exception $e) {
+                return "Error: " . $e->getMessage();
+            }
+        }
     }
 ?>
+        

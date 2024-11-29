@@ -49,7 +49,7 @@ MostrarMenu();
             <div class="header-body">
                 <div class="row">
                     <div class="col-lg-12 col-md-12">
-                        <h1 class="display-4 text-white">usuarios</h1>
+                        <h1 class="display-4 text-white">Lista de Usuarios</h1>
                         
                         <p class="text-white">Todos los usuarios disponibles.</p>
 

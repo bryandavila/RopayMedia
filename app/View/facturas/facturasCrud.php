@@ -2,10 +2,14 @@
 session_start();
 
 require_once $_SERVER['DOCUMENT_ROOT'] . "/RopayMedia/app/Controller/FacturaController/facturas_controller.php";
+require_once $_SERVER['DOCUMENT_ROOT'] . "/RopayMedia/app/Model/usuarioModel.php";
 include_once '../layout.php';
 $facturaController = new FacturaController();
+$usuarioModel = new usuarioModel();
 $facturaController->manejarAcciones(); 
 $productos = $facturaController->obtenerProductos();
+$usuarios = $usuarioModel->listarUsuarios();
+
 $mensaje = isset($_SESSION['mensaje']) ? $_SESSION['mensaje'] : '';
 $tipo = isset($_SESSION['tipo']) ? $_SESSION['tipo'] : 'success';
 unset($_SESSION['mensaje'], $_SESSION['tipo']); 
@@ -20,7 +24,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $_SESSION['tipo'] = "error";
     }
 }
-
+$idPedido = isset($_SESSION['id_pedido']) ? $_SESSION['id_pedido'] : ''; // Recibir el id_pedido generado
 ?>
 <!DOCTYPE html>
 <html>
@@ -39,30 +43,36 @@ MostrarMenu();
 <div class="container mt-5">
     <h1 class="text-center mb-4">Crear Factura</h1>
     
-    <!-- Formulario para crear  facturas -->
     <div class="card mb-4">
         <div class="card-header bg-primary text-white">
             <h4 class="mb-0">Formulario de Creación de Factura</h4>
         </div>
         <div class="card-body">
             <form method="POST" action="facturasCrud.php">
+            <input type="hidden" name="id_pedido" value="<?= $idPedido ?>">
                 <div class="mb-3">
-                    <label for="id_cliente" class="form-label">Cliente</label>
-                    <input type="number" name="id_cliente" id="id_cliente" class="form-control" placeholder="Ingrese el ID del cliente" required>
-                </div>
-                <div class="mb-3">
-                    <label for="id_pedido" class="form-label">Numero de Pedido</label>
-                    <input type="number" name="id_pedido" id="id_pedido" class="form-control" placeholder="Ingrese el ID del pedido" required>
-                </div>
-                <div class="mb-3">
-                    <label for="productos" class="form-label">Productos</label>
-                    <select name="productos[]" id="productos" class="form-control" multiple="multiple" required>
-    <?php foreach ($productos as $producto): ?>
-        <option value="<?php echo $producto['id_producto']; ?>" 
-                data-producto="<?php echo $producto['nombre_producto']; ?>"
-                data-precio="<?php echo $producto['precio']; ?>">
-            <?php echo isset($producto['nombre_producto']) ? $producto['nombre_producto'] : 'Producto no disponible'; ?>
-        </option>
+                <label for="id_usuario" class="form-label">Usuario</label>
+                <select name="id_usuario" id="id_usuario" class="form-control select2" required>
+                    <option value="" disabled selected>Seleccione un usuario</option>
+                    <?php if (!empty($usuarios) && is_array($usuarios)): ?>
+                        <?php foreach ($usuarios as $usuario): ?>
+                            <option value="<?= $usuario['id_usuario'] ?>">
+                                <?= $usuario['id_usuario'] ?> - <?= $usuario['nombre'] ?>
+                            </option>
+                            <?php endforeach; ?>
+                            <?php else: ?>
+                                <option value="" disabled>No se encontraron usuarios</option>
+                                <?php endif; ?>
+                            </select>
+                        </div>
+                        <label for="productos" class="form-label">Productos</label>
+                        <select name="productos[]" id="productos" class="form-control" multiple="multiple" required>
+                            <?php foreach ($productos as $producto): ?>
+                                <option value="<?php echo $producto['id_producto']; ?>" 
+                                data-producto="<?php echo $producto['nombre_producto']; ?>"
+                                data-precio="<?php echo $producto['precio']; ?>">
+                                <?php echo isset($producto['nombre_producto']) ? $producto['nombre_producto'] : 'Producto no disponible'; ?>
+                            </option>
     <?php endforeach; ?>
 </select>
                 </div>
@@ -155,6 +165,18 @@ MostrarMenu();
 <script src="assets/vendor/jquery.scrollbar/jquery.scrollbar.min.js"></script>
 <script src="assets/vendor/jquery-scroll-lock/dist/jquery-scrollLock.min.js"></script>
 <script src="assets/js/argon.js?v=1.2.0"></script>
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    // Inicializar Select2 en el dropdown
+    $(document).ready(function() {
+        $('#id_cliente').select2({
+            placeholder: "Seleccione un cliente",
+            allowClear: true,
+            theme: "bootstrap-5" // Opcional: Integra el estilo con Bootstrap 5
+        });
+    });
+</script>
 </body>
 </html>
 </body>

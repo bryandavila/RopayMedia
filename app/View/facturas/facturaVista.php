@@ -56,13 +56,27 @@ MostrarMenu();
                     <tr>
                         <th scope="row">Cliente</th>
                         <td>
-                            <?php echo isset($factura['id_cliente']) ? htmlspecialchars($factura['id_cliente']) : 'Cliente no disponible'; ?>
+                            <?php echo isset($factura['id_usuario']) ? htmlspecialchars((string) $factura['id_usuario']) : 'Cliente no disponible';  ?>
                         </td>
                     </tr>
                     <tr>
                         <th scope="row">Número de Pedido</th>
                         <td>
-                            <?php echo isset($factura['id_pedido']) ? htmlspecialchars($factura['id_pedido']) : 'Pedido no disponible'; ?>
+                        <?php 
+                            if (isset($factura['id_pedido'])) {
+                                // Verificar si 'id_pedido' es un ObjectId
+                                if ($factura['id_pedido'] instanceof MongoDB\BSON\ObjectId) {
+                                    // Convertir ObjectId a su representación en cadena
+                                    echo htmlspecialchars((string) $factura['id_pedido']);
+                                } else {
+                                    // Si no es un ObjectId, convertirlo a cadena de manera segura
+                                    echo htmlspecialchars((string) $factura['id_pedido']);
+                                }
+                            } else {
+                                echo 'Pedido no disponible';
+                            }
+                        ?>
+                            ?>
                         </td>
                     </tr>
                     <tr>
