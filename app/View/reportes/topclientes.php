@@ -1,0 +1,112 @@
+<?php
+include_once '../layout.php';
+include_once '../../Model/reporteModel.php';
+include_once '../../Controller/ReporteController/reporteController.php';
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
+
+$reporteModel = new reporteModel();
+$facturas = $reporteModel->top10clientes();
+
+?>
+
+
+<!DOCTYPE html>
+<html>
+
+<?php 
+HeadCSS();
+?>
+
+<body class="d-flex flex-column min-vh-100">
+
+<?php 
+MostrarNav();
+MostrarMenu();
+?>
+
+<div class="container mt-5">
+    <h1 class="text-center mb-4">Reporte de los 10 productos mas vendidos</h1>
+
+    <?php if (!empty($mensaje)): ?>
+        <div class="alert alert-<?php echo $tipo; ?>" role="alert">
+            <?php echo $mensaje; ?>
+        </div>
+    <?php endif; ?>
+    
+    <!-- Tabla de Facturas -->
+    <div class="card mb-4">
+        <div class="card-header bg-primary text-white">
+            <h4 class="mb-0">Facturas Creadas</h4>
+        </div>
+        <div class="card-body">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Año / Mes</th>
+                        <th>Total ventas</th>
+                       
+                    </tr>
+                </thead>
+                <tbody>
+                <?php if (!empty($facturas)): ?>
+                    <?php foreach ($facturas as $index => $factura): ?>
+                        <tr>
+                            <td>
+                            <td>
+                            <?php  
+                                                   
+                              echo isset($index) 
+                              ? htmlspecialchars($index) 
+                              : 'Pedido no disponible'; 
+                             
+                            ?>
+                            </td>
+                            <td>
+                                <?php 
+                                echo isset($factura) 
+                                    ? htmlspecialchars($factura) 
+                                    : 'Pedido no disponible'; 
+                                   
+                                ?>
+                            </td>
+                           
+                           
+                        </tr>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <tr>
+                        <td colspan="6" class="text-center">No hay facturas registradas.</td>
+                    </tr>
+                <?php endif; ?>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<?php MostrarFooter(); ?>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    <?php if (!empty($mensaje)): ?>
+        Swal.fire({
+            icon: '<?php echo $tipo; ?>',
+            title: '<?php echo $mensaje; ?>',
+            showConfirmButton: false,
+            timer: 2000
+        });
+    <?php endif; ?>
+</script>
+
+<script src="assets/vendor/jquery/dist/jquery.min.js"></script>
+<script src="assets/vendor/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<script src="assets/vendor/js-cookie/js.cookie.js"></script>
+<script src="assets/vendor/jquery.scrollbar/jquery.scrollbar.min.js"></script>
+<script src="assets/vendor/jquery-scroll-lock/dist/jquery-scrollLock.min.js"></script>
+<script src="assets/js/argon.js?v=1.2.0"></script>
+</body>
+
+</html>

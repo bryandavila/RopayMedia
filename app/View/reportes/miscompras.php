@@ -1,5 +1,6 @@
 <?php
 include_once '../layout.php';
+include_once '../../Model/reporteModel.php';
 include_once '../../Controller/ReporteController/reporteController.php';
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
@@ -7,7 +8,9 @@ if (session_status() === PHP_SESSION_NONE) {
 
 
 $nombreUsuario = isset($_SESSION['nombre']) ? $_SESSION['nombre'] : '';
-
+$reporteModel = new reporteModel();
+$facturas = $reporteModel->obtenerComprasUsuario($_SESSION['id_usuario']);
+print_r($_SESSION['id_usuario']);
 ?>
 
 
@@ -46,9 +49,10 @@ MostrarMenu();
                         <th>#</th>
                         <th>Cliente</th>
                         <th>Numero de Pedido</th>
+                        <th>Productos</th>
                         <th>Total</th>
                         <th>Fecha de Factura</th>
-                        <th>Acciones</th>
+                     
                     </tr>
                 </thead>
                 <tbody>
@@ -68,6 +72,11 @@ MostrarMenu();
                                 echo isset($factura['id_pedido']) 
                                     ? htmlspecialchars($factura['id_pedido']) 
                                     : 'Pedido no disponible'; 
+                                ?>
+                            </td>
+                            <td>
+                            <?php                             
+                                print_r($factura['productos']);
                                 ?>
                             </td>
                             <td>
@@ -92,13 +101,7 @@ MostrarMenu();
                             ?>
                                
                             </td>
-                            <td>
-                                <form method="POST" action="facturasCrud.php" class="d-inline">
-                                    <input type="hidden" name="id_factura" value="<?php echo htmlspecialchars($factura['id_factura']); ?>">
-                                    <button type="submit" name="accion" value="Eliminar" class="btn btn-danger btn-sm">Eliminar</button>
-                                </form>
-                                <a href="facturaVista.php?id_factura=<?php echo htmlspecialchars($factura['id_factura']); ?>" class="btn btn-warning btn-sm">Ver</a>
-                            </td>
+                           
                         </tr>
                     <?php endforeach; ?>
                 <?php else: ?>

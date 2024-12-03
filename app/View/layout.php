@@ -4,7 +4,7 @@ if (session_status() === PHP_SESSION_NONE) {
 }
 
 $rol = isset($_SESSION['id_rol']) ? $_SESSION['id_rol'] : 3;
-
+print_r($_SESSION);
 function MostrarMenu()
 {
     echo '<div class="main-content" id="panel">
@@ -180,7 +180,7 @@ function MostrarNav()
                         </h6>
                         <ul class="navbar-nav">
                             <li class="nav-item">
-                                <a class="nav-link" href="miscompras.php">
+                                <a class="nav-link" href="../reportes/miscompras.php">
                                     <i class="ni ni-bullet-list-67 text-primary"></i>
                                     <span class="nav-link-text">Ver mis compras</span>
                                 </a>
@@ -188,20 +188,22 @@ function MostrarNav()
                             if ($rol == 1) {
                                 echo '
                                 <li class="nav-item">
-                                    <a class="nav-link" href="#">
+                                    <a class="nav-link" href="../reportes/reporteeconomico.php">
                                         <i class="ni ni-box-2 text-primary"></i>
                                         <span class="nav-link-text">Reporte económico</span>
                                     </a>
                                 </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="#">
+                               <li class="nav-item">
+                                    <a class="nav-link" href="../reportes/topproductos.php">
                                         <i class="ni ni-box-2 text-primary"></i>
-                                        <span class="nav-link-text">Top 10 productos(</span>
+                                        <span class="nav-link-text">Top 10 Productos</span>
                                     </a>
-                                </li><li class="nav-item">
-                                    <a class="nav-link" href="#">
+                                </li>
+                            </li>
+                            <li class="nav-item">
+                                    <a class="nav-link" href="../reportes/topclientes.php">
                                         <i class="ni ni-box-2 text-primary"></i>
-                                        <span class="nav-link-text">Top 10 clientes(</span>
+                                        <span class="nav-link-text">Top 10 Clientes</span>
                                     </a>
                                 </li>';
                             }
