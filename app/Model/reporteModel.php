@@ -78,7 +78,7 @@
                 $facturas = $facturasCollection->find(); 
                
                 
-                $listaFacturas = [];
+                $listames = [];
                 foreach ($facturas as $factura) {
                     $fechaEmision = null;
                     if (isset($factura['fecha_emision']) && !empty($factura['fecha_emision'])) {
@@ -92,19 +92,19 @@
                                
 
                     
-                     if (array_key_exists($anomes, $listaFacturas)){
-                        $listaFacturas [$anomes] += (float)$factura['total'];
+                     if (array_key_exists($anomes, $listames)){
+                        $listames [$anomes] += (float)$factura['total'];
 
                      }else{
                         
-                        $listaFacturas [$anomes]= (float)$factura['total'];
+                        $listames [$anomes]= (float)$factura['total'];
                         
                      }
                      
                                            
                 }
             
-                return $listaFacturas;
+                return $listames;
 
             }catch(\Exception $e){
                 return [];
@@ -121,13 +121,9 @@
                
                 $facturasCollection = $db->facturas; 
                 $facturas = $facturasCollection->find();
-                $pedidosCollection = $db->pedidos; 
-                $pedidos = $pedidosCollection->find();
-
-                $contador=1;
+                               
                 $productosDetalles = [];   
-                $listaFacturas = [];
-                $prueba = [];
+                
                 foreach ($facturas as $factura) {
                     $pedidosCollection = $db->pedidos; 
                     $pedidos = $pedidosCollection->find(['id_pedido' => $factura['id_pedido']]);
@@ -138,20 +134,20 @@
                           $Producton= $producto->nombre . PHP_EOL;
                           $cantidadn= $producto->cantidad . PHP_EOL;
                            
-                            if (array_key_exists($Producton, $prueba)){
-                                $prueba [$Producton] += $cantidadn;
+                            if (array_key_exists($Producton, $productosDetalles)){
+                                $productosDetalles [$Producton] += $cantidadn;
         
                              }else{
                                 
-                                $prueba [$Producton]= $cantidadn;                            
+                                $productosDetalles [$Producton]= $cantidadn;                            
                              }
                         }
                        
                     }
                 }
               
-              $prueba = array_slice($prueba, 0, 10);  
-            return $prueba;
+              $productosDetalles = array_slice($productosDetalles, 0, 10);  
+            return $productosDetalles;
 
             }catch(\Exception $e){
                 return [];
@@ -169,26 +165,26 @@
                 $facturasCollection = $db->facturas; 
                 $facturas = $facturasCollection->find();
                                 
-                $prueba = [];
+                $clienteDetalles = [];
                 foreach ($facturas as $factura) {         
                     $usuariosCollection = $db->usuarios; 
                     $usuarios = $usuariosCollection->find(['_id' => $factura['id_cliente']]); 
                     foreach ($usuarios as $usuario) {  
 
-                            if (array_key_exists($usuario['nombre'], $prueba)){
-                                $prueba [$usuario['nombre']] += $factura['total'];
+                            if (array_key_exists($usuario['correo'], $clienteDetalles)){
+                                $clienteDetalles [$usuario['correo']] += $factura['total'];
         
                              }else{
                                 
-                                $prueba [$usuario['nombre']] = $factura['total'];                          
+                                $clienteDetalles [$usuario['correo']] = $factura['total'];                          
                              }
                         
                        
                             }
                 }
               
-              $prueba = array_slice($prueba, 0, 10);  
-            return $prueba;
+              $clienteDetalles = array_slice($clienteDetalles, 0, 10);  
+            return $clienteDetalles;
 
             }catch(\Exception $e){
                 return [];

@@ -4,7 +4,7 @@ if (session_status() === PHP_SESSION_NONE) {
 }
 
 $rol = isset($_SESSION['id_rol']) ? $_SESSION['id_rol'] : 3;
-print_r($_SESSION);
+
 function MostrarMenu()
 {
     echo '<div class="main-content" id="panel">

@@ -7,9 +7,9 @@ if (session_status() === PHP_SESSION_NONE) {
 }
 
 
-$reporteModel = new reporteModel();
-$facturas = $reporteModel->top10clientes();
-
+$reporteController = new reporteController();
+$reportes = $reporteController->top10clientes();
+$cont=1;
 ?>
 
 
@@ -28,7 +28,7 @@ MostrarMenu();
 ?>
 
 <div class="container mt-5">
-    <h1 class="text-center mb-4">Reporte de los 10 productos mas vendidos</h1>
+    <h1 class="text-center mb-4">Reporte de los 10 clientes con más compras</h1>
 
     <?php if (!empty($mensaje)): ?>
         <div class="alert alert-<?php echo $tipo; ?>" role="alert">
@@ -36,26 +36,26 @@ MostrarMenu();
         </div>
     <?php endif; ?>
     
-    <!-- Tabla de Facturas -->
+    <!-- Tabla de reportes -->
     <div class="card mb-4">
         <div class="card-header bg-primary text-white">
-            <h4 class="mb-0">Facturas Creadas</h4>
+            <h4 class="mb-0">Top 10</h4>
         </div>
         <div class="card-body">
             <table class="table table-striped">
                 <thead>
                     <tr>
                         <th>#</th>
-                        <th>Año / Mes</th>
-                        <th>Total ventas</th>
+                        <th>Usuario</th>
+                        <th>Total Comprado</th>
                        
                     </tr>
                 </thead>
                 <tbody>
-                <?php if (!empty($facturas)): ?>
-                    <?php foreach ($facturas as $index => $factura): ?>
+                <?php if (!empty($reportes)): ?>
+                    <?php foreach ($reportes as $index => $reporte): ?>
                         <tr>
-                            <td>
+                        <td><?php echo $cont++; ?></td>
                             <td>
                             <?php  
                                                    
@@ -67,8 +67,8 @@ MostrarMenu();
                             </td>
                             <td>
                                 <?php 
-                                echo isset($factura) 
-                                    ? htmlspecialchars($factura) 
+                                echo isset($reporte) 
+                                    ? htmlspecialchars($reporte) 
                                     : 'Pedido no disponible'; 
                                    
                                 ?>
@@ -79,7 +79,7 @@ MostrarMenu();
                     <?php endforeach; ?>
                 <?php else: ?>
                     <tr>
-                        <td colspan="6" class="text-center">No hay facturas registradas.</td>
+                        <td colspan="6" class="text-center">No hay registros.</td>
                     </tr>
                 <?php endif; ?>
                 </tbody>

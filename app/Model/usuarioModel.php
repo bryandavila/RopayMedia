@@ -22,29 +22,7 @@
                 return "Error: " . $e->getMessage();
             }
         }
-        public function obtenerSiguienteID() {
-            try {
-                
-                $db = $this->conexion->conectar();   
-                $secuenciasCollection = $db->secuencias;
-                $resultado = $secuenciasCollection->findOne(['_id' => 'usuarios']);
-                
-                if ($resultado === null) {
-                    throw new Exception("No se encontró el documento de secuencias.");
-                }
-                
-                $idactual = $resultado['valor'];  
-    
-                $secuenciasCollection->updateOne(
-                    ['_id' => 'usuarios'],  
-                    ['$inc' => ['valor' => 1]]  
-                );
-                
-                return $idactual;  
-            } catch (Exception $e) {
-                die("Error al obtener el siguiente ID: " . $e->getMessage());
-            }
-        }
+        
 
         public function registrarUsuario($nombre, $apellido, $telefono, $correo, $contrasena, $id_rol) {
             try {
@@ -52,12 +30,12 @@
                 if ($db === null) {
                     return "Error al conectar a la base de datos.";
                 }
-                $siguienteID = $this->obtenerSiguienteID();
+               
                 $usuariosCollection = $db->usuarios; 
                 $password_hash = password_hash($contrasena, PASSWORD_DEFAULT); 
                 
                 $nuevoUsuario = [
-                    '_id' => $siguienteID,
+                    '_id' => time(),
                     'nombre' => $nombre,
                     'apellido' => $apellido,
                     'telefono' => $telefono,
