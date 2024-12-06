@@ -32,41 +32,44 @@ unset($_SESSION['mensaje']);
             <h4 class="mb-0">Lista de productos</h4>
         </div>
         <div class="card-body">
-            <table class="table table-bordered">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Nombre</th>
-                        <th>Descripción</th>
-                        <th>Precio</th>
-                        <th>Stock</th>
-                        <th>Categoría</th>
-                        <th>Acciones</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php foreach ($productos as $producto): ?>
+            <div class="table-responsive">
+                <table class="table table-bordered table-striped">
+                    <thead>
                         <tr>
-                            <td><?php echo htmlspecialchars($producto['id_producto']); ?></td>
-                            <td><?php echo htmlspecialchars($producto['nombre_producto']); ?></td>
-                            <td><?php echo htmlspecialchars($producto['descripcion']); ?></td>
-                            <td><?php echo htmlspecialchars($producto['precio']); ?></td>
-                            <td><?php echo htmlspecialchars($producto['stock']); ?></td>
-                            <td><?php echo htmlspecialchars($producto['id_categoria']); ?></td>
-                            <td>
-                                <a href="editarProducto.php?id_producto=<?php echo $producto['id_producto']; ?>" class="btn btn-primary btn-sm">Editar</a>
-                                <form method="POST" action="listaProductos.php" class="d-inline">
-                                    <input type="hidden" name="id_producto" value="<?php echo $producto['id_producto']; ?>">
-                                    <button type="submit" name="accion" value="Eliminar" class="btn btn-danger btn-sm">Eliminar</button>
-                                </form>
-                            </td>
+                            <th>ID</th>
+                            <th>Nombre</th>
+                            <th>Descripción</th>
+                            <th>Precio</th>
+                            <th>Stock</th>
+                            <th>Categoría</th>
+                            <th>Acciones</th>
                         </tr>
-                    <?php endforeach; ?>
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($productos as $producto): ?>
+                            <tr>
+                                <td><?php echo htmlspecialchars($producto['id_producto']); ?></td>
+                                <td><?php echo htmlspecialchars($producto['nombre_producto']); ?></td>
+                                <td><?php echo htmlspecialchars($producto['descripcion']); ?></td>
+                                <td><?php echo htmlspecialchars($producto['precio']); ?></td>
+                                <td><?php echo htmlspecialchars($producto['stock']); ?></td>
+                                <td><?php echo htmlspecialchars($producto['id_categoria']); ?></td>
+                                <td>
+                                    <a href="productosCrud.php?id_producto=<?php echo $producto['id_producto']; ?>" class="btn btn-primary btn-sm">Editar</a>
+                                    <form method="POST" action="listaProductos.php" class="d-inline">
+                                        <input type="hidden" name="id_producto" value="<?php echo $producto['id_producto']; ?>">
+                                        <button type="submit" name="accion" value="Eliminar" class="btn btn-danger btn-sm">Eliminar</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 </div>
+
 
 <?php MostrarFooter(); ?>
 

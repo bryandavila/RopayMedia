@@ -34,24 +34,24 @@ class CategoriaModel {
         }
     }
 
-    // Método para obtener una categoría por id_categoria
-    public function obtenerCategoriaPorId($idCategoria) {
+     // Método para obtener una categoría por id_categoria
+     public function obtenerCategoriaPorId($idCategoria) {
         try {
             $db = $this->conexion->conectar();
             if ($db === null) {
                 return null;
             }
-
+    
             $categoriasCollection = $db->categorias; // Seleccionar la colección de categorías
-            $categoria = $categoriasCollection->findOne(['id_categoria' => (int)$idCategoria]); // Buscar por id_categoria
-
+            $categoria = $categoriasCollection->findOne(['_id' => $idCategoria]); // Buscar por _id
+    
             if ($categoria) {
                 return [
-                    'id_categoria' => (int)$categoria['id_categoria'],
+                    'id_categoria' => (string)$categoria['_id'], // Convertir a string para la respuesta
                     'nombre_categoria' => $categoria['nombre_categoria']
                 ];
             }
-
+    
             return null; // Retorna null si no encuentra la categoría
         } catch (\Exception $e) {
             return null; // Manejo de errores
@@ -59,19 +59,15 @@ class CategoriaModel {
     }
 
     // Método para crear una nueva categoría
-    public function crearCategoria($nombreCategoria) {
+    public function crearCategoria($categoria) {
         try {
             $db = $this->conexion->conectar();
             if ($db === null) {
                 return false;
             }
-
+    
             $categoriasCollection = $db->categorias;  // Seleccionar la colección de categorías
-            $nuevaCategoria = [
-                'nombre_categoria' => $nombreCategoria
-            ];
-
-            $resultado = $categoriasCollection->insertOne($nuevaCategoria); // Insertar la nueva categoría
+            $resultado = $categoriasCollection->insertOne($categoria); // Insertar la nueva categoría
             return $resultado->getInsertedCount() > 0;
         } catch (\Exception $e) {
             return false;
@@ -103,19 +99,23 @@ class CategoriaModel {
         try {
             $db = $this->conexion->conectar();
             if ($db === null) {
+                error_log("Error: conexión a la base de datos fallida.");
                 return false;
             }
-
-            $categoriasCollection = $db->categorias;  // Seleccionar la colección de categorías
-            $resultado = $categoriasCollection->deleteOne(
-                ['_id' => new MongoDB\BSON\ObjectId($idCategoria)] // Filtro por ID
-            );
-
+    
+            $categoriasCollection = $db->categorias;
+            $resultado = $categoriasCollection->deleteOne(['_id' => $idCategoria]);
+    
+            // Log para verificar cuántos documentos se eliminaron
+            error_log("Documentos eliminados: " . $resultado->getDeletedCount());
+    
             return $resultado->getDeletedCount() > 0;
         } catch (\Exception $e) {
+            error_log("Error al eliminar la categoría: " . $e->getMessage());
             return false;
         }
     }
+        
 }
 ?>
 

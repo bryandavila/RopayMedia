@@ -1,5 +1,7 @@
 <?php
 require_once $_SERVER['DOCUMENT_ROOT'] . "/RopayMedia/app/Model/baseDatosModel.php";
+use MongoDB\BSON\ObjectId;
+
 
 class ProductoModel {
     private $conexion;
@@ -46,7 +48,12 @@ class ProductoModel {
             if ($db === null) {
                 return false;
             }
-
+    
+            // Convertir id_categoria a ObjectId antes de guardar
+            if (isset($producto['id_categoria'])) {
+                $producto['id_categoria'] = new ObjectId($producto['id_categoria']);
+            }
+    
             $productosCollection = $db->productos;
             $productosCollection->insertOne($producto); // Insertar el producto en la colección
             return true;
@@ -64,8 +71,10 @@ class ProductoModel {
             }
 
             $productosCollection = $db->productos;
+
+            // Usar ObjectId para el filtro
             $productosCollection->updateOne(
-                ['id_producto' => (int)$idProducto], // Filtro
+                ['id_producto' => $idProducto], // No convertir a int, mantén el ObjectId
                 ['$set' => $productoActualizado] // Datos a actualizar
             );
             return true;
@@ -82,8 +91,11 @@ class ProductoModel {
                 return null;
             }
 
+            // Convertir id_producto a ObjectId si es necesario
+            $objectId = new ObjectId($idProducto);
+
             $productosCollection = $db->productos;
-            $producto = $productosCollection->findOne(['id_producto' => (int)$idProducto]); // Buscar por ID
+            $producto = $productosCollection->findOne(['id_producto' => $objectId]); // Buscar por ObjectId
 
             if ($producto) {
                 return [
@@ -103,6 +115,7 @@ class ProductoModel {
         }
     }
 
+
     // Eliminar un producto
     public function eliminarProducto($idProducto) {
         try {
@@ -110,14 +123,17 @@ class ProductoModel {
             if ($db === null) {
                 return false;
             }
-
+    
             $productosCollection = $db->productos;
-            $productosCollection->deleteOne(['id_producto' => (int)$idProducto]); // Eliminar por ID
+    
+            // Usar ObjectId para eliminar
+            $productosCollection->deleteOne(['id_producto' => $idProducto]); // Eliminar por ObjectId
             return true;
         } catch (\Exception $e) {
             return false;
         }
     }
+
     public function obtenerProductosPorCategoria($idCategoria) {
         try {
             $db = $this->conexion->conectar();
@@ -126,7 +142,7 @@ class ProductoModel {
             }
     
             $productosCollection = $db->productos;
-            $productos = $productosCollection->find(['id_categoria' => (int)$idCategoria]); // Filtrar por categoría
+            $productos = $productosCollection->find(['id_categoria' => new ObjectId($idCategoria)]); // Filtrar por categoría
     
             // Convertir el cursor de MongoDB a un array asociativo
             $listaProductos = [];
@@ -137,7 +153,7 @@ class ProductoModel {
                     'descripcion' => $producto['descripcion'],
                     'precio' => $producto['precio'],
                     'stock' => $producto['stock'],
-                    'id_categoria' => $producto['id_categoria'],
+                    'id_categoria' => (string) $producto['id_categoria'],
                     'ruta_imagen' => $producto['ruta_imagen']
                 ];
             }
@@ -147,7 +163,5 @@ class ProductoModel {
             return [];
         }
     }
-    }
-    
- 
+}
 ?>

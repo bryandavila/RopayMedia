@@ -1,76 +1,113 @@
 <?php
 require_once $_SERVER['DOCUMENT_ROOT'] . "/RopayMedia/app/Model/categoriaModel.php";
+use MongoDB\BSON\ObjectId;
 
 class CategoriaController {
     private $categoriaModel;
 
     public function __construct() {
-        $this->categoriaModel = new CategoriaModel(); // Instanciar el modelo de categorías
+        $this->categoriaModel = new CategoriaModel();
     }
 
-    // Método para obtener las categorías y enviarlas a la vista
     public function listarCategorias() {
-        $categorias = $this->categoriaModel->obtenerCategorias(); // Obtener categorías desde el modelo
-        return $categorias; // Retornar las categorías a la vista
+        return $this->categoriaModel->obtenerCategorias();
     }
 
-    // Método para crear una nueva categoría
     public function crearCategoria($nombreCategoria) {
-        if (!empty($nombreCategoria)) {
-            $this->categoriaModel->crearCategoria($nombreCategoria); // Llamar al modelo para crear la categoría
+        try {
+            if (!empty($nombreCategoria)) {
+                $nuevaCategoria = [
+                    'nombre_categoria' => $nombreCategoria // Solo el nombre de la categoría
+                ];
+    
+                $resultado = $this->categoriaModel->crearCategoria($nuevaCategoria); // Llamar al modelo
+                if ($resultado) {
+                    $_SESSION['mensaje'] = "La categoría '$nombreCategoria' ha sido creada exitosamente.";
+                    $_SESSION['tipo'] = 'success'; // Tipo de mensaje (puede ser success, error, etc.)
+                } else {
+                    $_SESSION['mensaje'] = "Hubo un error al crear la categoría '$nombreCategoria'.";
+                    $_SESSION['tipo'] = 'error';
+                }
+            }
+        } catch (Exception $e) {
+            $_SESSION['mensaje'] = "Error al crear la categoría: " . $e->getMessage();
+            $_SESSION['tipo'] = 'error';
         }
     }
-
-    // Método para actualizar una categoría existente
+    
     public function actualizarCategoria($idCategoria, $nombreCategoria) {
-        if (!empty($idCategoria) && !empty($nombreCategoria)) {
-            $this->categoriaModel->actualizarCategoria($idCategoria, $nombreCategoria); // Llamar al modelo para actualizar la categoría
+        try {
+            if (!empty($idCategoria) && !empty($nombreCategoria)) {
+                $resultado = $this->categoriaModel->actualizarCategoria($idCategoria, $nombreCategoria);
+                if ($resultado) {
+                    $_SESSION['mensaje'] = "La categoría '$nombreCategoria' ha sido actualizada exitosamente.";
+                    $_SESSION['tipo'] = 'success';
+                } else {
+                    $_SESSION['mensaje'] = "Hubo un error al actualizar la categoría '$nombreCategoria'.";
+                    $_SESSION['tipo'] = 'error';
+                }
+            }
+        } catch (Exception $e) {
+            $_SESSION['mensaje'] = "Error al actualizar la categoría: " . $e->getMessage();
+            $_SESSION['tipo'] = 'error';
         }
     }
-
-    // Método para eliminar una categoría
+    
     public function eliminarCategoria($idCategoria) {
-        if (!empty($idCategoria)) {
-            $this->categoriaModel->eliminarCategoria($idCategoria); // Llamar al modelo para eliminar la categoría
+        try {
+            if (!empty($idCategoria)) {
+                $objectId = new MongoDB\BSON\ObjectId($idCategoria); // Convertir a ObjectId
+                $categoria = $this->categoriaModel->obtenerCategoriaPorId($objectId); // Buscar por _id
+                if ($categoria) {
+                    $resultado = $this->categoriaModel->eliminarCategoria($objectId);
+                    if ($resultado) {
+                        $_SESSION['mensaje'] = "La categoría '{$categoria['nombre_categoria']}' ha sido eliminada exitosamente.";
+                        $_SESSION['tipo'] = 'success';
+                    } else {
+                        $_SESSION['mensaje'] = "Hubo un error al eliminar la categoría.";
+                        $_SESSION['tipo'] = 'error';
+                    }
+                } else {
+                    $_SESSION['mensaje'] = "La categoría no existe.";
+                    $_SESSION['tipo'] = 'error';
+                }
+            } else {
+                $_SESSION['mensaje'] = "ID de categoría no proporcionado.";
+                $_SESSION['tipo'] = 'error';
+            }
+        } catch (Exception $e) {
+            $_SESSION['mensaje'] = "Error al eliminar la categoría: " . $e->getMessage();
+            $_SESSION['tipo'] = 'error';
         }
     }
+        
 
-    // Manejar acciones basadas en datos enviados desde el formulario
     public function manejarAcciones() {
         $nombreCategoria = isset($_POST['nombre_categoria']) ? $_POST['nombre_categoria'] : '';
         $accion = isset($_POST['accion']) ? $_POST['accion'] : '';
         $idCategoria = isset($_POST['id_categoria']) ? $_POST['id_categoria'] : '';
     
-        $mensaje = ""; // Inicializar el mensaje vacío
-        $tipo = "success"; // Tipo por defecto de alerta
-    
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             try {
                 if ($accion === 'Crear') {
                     $this->crearCategoria($nombreCategoria);
-                    $mensaje = "¡Categoría creada con éxito!";
                 } elseif ($accion === 'Actualizar') {
                     $this->actualizarCategoria($idCategoria, $nombreCategoria);
-                    $mensaje = "¡Categoría actualizada con éxito!";
                 } elseif ($accion === 'Eliminar') {
+                    // Eliminar la categoría
                     $this->eliminarCategoria($idCategoria);
-                    $mensaje = "¡Categoría eliminada con éxito!";
                 }
-            } catch (\Exception $e) {
-                $mensaje = "Error: " . $e->getMessage();
-                $tipo = "error"; // Cambiar tipo a error si ocurre una excepción
+    
+                // Redirigir a categoriasCrud.php después de la acción
+                header("Location: categoriasCrud.php");
+                exit();
+            } catch (Exception $e) {
+                $_SESSION['mensaje'] = "Error: " . $e->getMessage();
+                $_SESSION['tipo'] = 'error';
+                header("Location: categoriasCrud.php");
+                exit();
             }
-    
-            // Guardar el mensaje y el tipo en la sesión para la vista
-            session_start();
-            $_SESSION['mensaje'] = $mensaje;
-            $_SESSION['tipo'] = $tipo;
-    
-            header("Location: categoriasCrud.php"); // Refrescar la página
-            exit();
         }
-    }
-    
+    }   
 }
 ?>
-

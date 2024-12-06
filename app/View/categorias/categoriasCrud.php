@@ -30,6 +30,14 @@ MostrarMenu();
 <div class="container mt-5">
     <h1 class="text-center mb-4">Administrar categorías</h1>
     
+    <!-- Mostrar el mensaje de éxito o error -->
+    <?php if (!empty($mensaje)): ?>
+        <div class="alert alert-<?php echo $tipo; ?> alert-dismissible fade show" role="alert">
+            <?php echo $mensaje; ?>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    <?php endif; ?>
+    
     <!-- Formulario para crear o actualizar categorías -->
     <div class="card mb-4">
         <div class="card-header bg-primary text-white">
