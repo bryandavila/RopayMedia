@@ -56,6 +56,11 @@
                 }
         
                 $pedido = new carrito_comprasModel();
+                $resultado = $pedido->crearPedido($id_usuario, $metodo_retiro, $direccion, $productos, $total, $img_sinpe);
+                if ($resultado) {
+                    echo json_encode(['success' => true, 'message' => 'Pedido realizado exitosamente.']);
+                } 
+                /*
                 $id_pedido = $pedido->crearPedido($id_usuario, $metodo_retiro, $direccion, $productos, $total, $img_sinpe);
                 if ($id_pedido) {
                     // Crear factura con el id_pedido
@@ -78,7 +83,7 @@
                         'success' => false,
                         'message' => 'Error al crear el pedido.'
                     ]);
-                }
+                } */
             }
         }
     }

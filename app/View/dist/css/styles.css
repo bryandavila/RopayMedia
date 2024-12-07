@@ -44,3 +44,7 @@ input[type="file"]::-webkit-file-upload-button {
     text-align: center;
 }
 
+.table-custom {
+    background-color: #6a1b9a; /* Púrpura */
+    color: #ffffff; /* Blanco */
+}

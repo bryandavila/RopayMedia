@@ -1,6 +1,7 @@
 <?php 
     include_once '../layout.php';
     $_SESSION['carrito'] = [];
+    $_SESSION['carrito_cantidad'] = 0;
 ?>
 
 <!DOCTYPE html>
