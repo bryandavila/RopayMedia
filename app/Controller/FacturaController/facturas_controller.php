@@ -27,40 +27,39 @@ class FacturaController {
     public function crearFactura($idUsuario, $idPedido, $productos, $total,$detalle) {
         $idPedido = $this->crearPedido($idUsuario, $productos, $total, $detalle);
         $fechaEmision = date("Y-m-d H:i:s");
-        error_log("Datos recibidos en 'productos': " . print_r($productos, true));
-        
-
-        // Validar el arreglo
-        if (isset($productos) && is_array($productos)) {
-            $productos = array_filter($productos, function($producto) {
-                return !is_null($producto) && is_numeric($producto);
-            });
-        } else {
-            $productos = []; 
-        }
-        
-        
-        // Crear el arreglo de la factura
-        $factura = [
-            'id_factura' => time(),
-            'id_usuario' => (int)$idUsuario,
-            'id_pedido' => (int)$idPedido,
-            'productos' => $productos,
-            'total' => (float)$total,
-            'fecha_emision' => $fechaEmision,
-            'detalle' => $detalle,
+       // Validar y estructurar los productos
+    $productosFactura = [];
+    foreach ($productos as $producto) {
+        $productosFactura[] = [
+            'id_producto' => (int)$producto['id_producto'],
+            'nombre' => $producto['nombre'],
+            'cantidad' => (int)$producto['cantidad'],
+            'precio' => (float)$producto['precio'],
         ];
-    
-        error_log("Factura procesada: " . print_r($factura, true));
-    
-        // Insertar la factura en la base de datos
-        if ($this->facturaModel->crearFactura($factura)) {
-            $_SESSION['mensaje'] = "Factura creada exitosamente.";
-        } else {
-            $_SESSION['mensaje'] = "Error al crear la factura.";
-        }
     }
-    
+
+    // Estructurar la factura
+    $factura = [
+        'id_factura' => time(),
+        'id_usuario' => (int)$idUsuario,
+        'id_pedido' => (int)$idPedido,
+        'productos' => $productosFactura, 
+        'total' => (float)$total,
+        'fecha_emision' => $fechaEmision,
+        'detalle' => $detalle,
+    ];
+
+    // Insertar la factura
+    if ($this->facturaModel->crearFactura($factura)) {
+        $this->actualizarStockDeProductos($productos);
+        
+        $_SESSION['mensaje'] = "Factura creada exitosamente.";
+        return true;
+    } else {
+        $_SESSION['mensaje'] = "Error al crear la factura.";
+        return false;
+    }
+}
     public function actualizarFactura($idFactura, $idUsuario, $idPedido, $productos, $total, $fechaEmision,$detalle) {
         $facturaActualizada = [
             'id_usuario' => (int)$idUsuario,
@@ -107,7 +106,7 @@ class FacturaController {
             return;
         }
         $pedidosCollection = $db->pedidos;
-        $id_pedido = time();  // Se utiliza time() como el ID único para el pedido
+        $id_pedido = time();  
         $nuevoPedido = [
             'id_pedido' => $id_pedido,
             'fecha' => (new DateTime())->format('Y-m-d H:i:s'),
@@ -127,6 +126,34 @@ class FacturaController {
             $_SESSION['mensaje'] = "Error al crear el pedido.";
             return null;  // Retorna null si hubo un error
         } }
+        private function actualizarStockDeProductos($productos) {
+            $db = (new Conexion())->conectar();
+            if ($db === null) {
+                $_SESSION['mensaje'] = "Error al conectar a la base de datos.";
+                return;
+            }
+            $productosCollection = $db->productos;
+            foreach ($productos as $producto) {
+        $productoId = new MongoDB\BSON\ObjectId($producto['id_producto']);
+        $cantidadVendida = (int)$producto['cantidad'];
+        $productoData = $productosCollection->findOne(['id_producto' => $productoId]);
+        if (!$productoData) {
+            $_SESSION['mensaje'] = "Producto con ID $productoId no encontrado.";
+            return;
+        }
+        if ($productoData['stock'] < $cantidadVendida) {
+            $_SESSION['mensaje'] = "No hay suficiente stock para el producto " . $producto['nombre'];
+            return;  
+        }
+
+        $productosCollection->updateOne(
+            ['id_producto' => $productoId],
+            ['$inc' => ['stock' => -$cantidadVendida]] 
+        );
+
+        error_log("Stock actualizado para producto ID: $productoId, nuevo stock: " . ($productoData['stock'] - $cantidadVendida));
+    }
+}
 
     public function manejarAcciones() {
         $accion = isset($_POST['accion']) ? $_POST['accion'] : '';
@@ -134,11 +161,12 @@ class FacturaController {
     
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             try {
+                $productos = isset($_POST['productos']) ? json_decode($_POST['productos'], true) : [];
                 if ($accion === 'Crear') {
                     $this->crearFactura(
                         $_POST['id_usuario'], 
                         $_POST['id_pedido'], 
-                        $_POST['productos'], 
+                        $productos, 
                         $_POST['total'],
                         $_POST['detalle']
                     );

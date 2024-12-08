@@ -11,7 +11,7 @@
                 $telefono = $_POST['telefono'];
                 $correo = $_POST['correo'];
                 $contrasena = $_POST['contrasena'];
-                $rol = 2;  
+                $rol = 1;  
 
                 $usuario = new usuarioModel();
                 $resultado = $usuario->validarCorreo($correo);

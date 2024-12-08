@@ -53,30 +53,16 @@ MostrarMenu();
         <div class="card-body">
             <table class="table table-bordered">
                 <tbody>
-                    <tr>
-                        <th scope="row">Cliente</th>
+                <tr>
+                        <th scope="row">Pedido</th>
                         <td>
-                            <?php echo isset($factura['id_usuario']) ? htmlspecialchars((string) $factura['id_usuario']) : 'Cliente no disponible';  ?>
+                            <?php echo isset($factura['id_pedido']) ? htmlspecialchars((string) $factura['id_pedido']) : 'Pedido no disponible'; ?>
                         </td>
                     </tr>
                     <tr>
-                        <th scope="row">Número de Pedido</th>
+                        <th scope="row">Cliente</th>
                         <td>
-                        <?php 
-                            if (isset($factura['id_pedido'])) {
-                                // Verificar si 'id_pedido' es un ObjectId
-                                if ($factura['id_pedido'] instanceof MongoDB\BSON\ObjectId) {
-                                    // Convertir ObjectId a su representación en cadena
-                                    echo htmlspecialchars((string) $factura['id_pedido']);
-                                } else {
-                                    // Si no es un ObjectId, convertirlo a cadena de manera segura
-                                    echo htmlspecialchars((string) $factura['id_pedido']);
-                                }
-                            } else {
-                                echo 'Pedido no disponible';
-                            }
-                        ?>
-                            ?>
+                            <?php echo isset($factura['id_usuario']) ? htmlspecialchars((string) $factura['id_usuario']) : 'Cliente no disponible'; ?>
                         </td>
                     </tr>
                     <tr>
@@ -86,13 +72,19 @@ MostrarMenu();
                         </td>
                     </tr>
                     <tr>
+                    <th scope="row">Detalle</th>
+                    <td>
+                        <?php echo isset($factura['detalle']) ? htmlspecialchars($factura['detalle']) : 'Detalles no disponibles'; ?>
+                     </td>
+                     </tr>
+                    <tr>
                         <th scope="row">Fecha de Emisión</th>
                         <td>
                             <?php 
                             if (!empty($factura['fecha_emision'])) {
                                 $fecha = DateTime::createFromFormat('Y-m-d H:i:s', $factura['fecha_emision']);
                                 if ($fecha) {
-                                    echo htmlspecialchars($fecha->format('d-m-Y H:i:s')); // Formato deseado
+                                    echo htmlspecialchars($fecha->format('d-m-Y H:i:s'));
                                 } else {
                                     echo 'Formato de fecha inválido';
                                 }
@@ -102,22 +94,47 @@ MostrarMenu();
                             ?>
                         </td>
                     </tr>
-                    <tr>
-        <th scope="row">Detalle</th>
-        <td>
-            <?php echo isset($factura['detalle']) ? htmlspecialchars($factura['detalle']) : 'Detalles no disponibles'; ?>
-        </td>
-    </tr>
-</tbody>
-            
                 </tbody>
             </table>
+        </div>
+    </div>
 
+    <div class="card mb-4">
+    <div class="card-header bg-secondary text-white">
+        <h4 class="mb-0">Productos</h4>
+    </div>
+    <div class="card-body">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Producto</th>
+                    <th>Cantidad</th>
+                    <th>Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php if (isset($factura['productos']) && is_array($factura['productos'])): ?>
+                    <?php foreach ($factura['productos'] as $producto): ?>
+                        <tr>
+                            <td><?php echo htmlspecialchars($producto['nombre']); ?></td>
+                            <td><?php echo htmlspecialchars($producto['cantidad']); ?></td>
+                            <td>₡<?php echo number_format($producto['cantidad'] * $producto['precio'], 2); ?></td>
+                        </tr>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <tr>
+                        <td colspan="3">No hay productos disponibles</td>
+                    </tr>
+                <?php endif; ?>
+            </tbody>
+        </table>
+    </div>
+</div>
             <a href="listaFacturas.php" class="btn btn-secondary btn-sm mt-4">Volver al listado</a>
 
         </div>
     </div>
-</div>
+</>
 
 <?php MostrarFooter(); ?>
 
