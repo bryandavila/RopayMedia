@@ -68,9 +68,18 @@ MostrarMenu();
                                 ?>
                             </td>
                             <td>
-                            <?php                             
-                                print_r($reporte['productos']);
-                                ?>
+                                <?php if (!empty($reporte['productos']) && is_iterable($reporte['productos'])): ?>
+                                    <ul>
+                                        <?php foreach ($reporte['productos'] as $producto): ?>
+                                            <li>
+                                                <?php echo htmlspecialchars($producto['nombre']); ?>
+                                                <strong>  Cantidad:</strong> <?php echo htmlspecialchars($producto['cantidad']); ?><br>
+                                            </li>
+                                        <?php endforeach; ?>
+                                    </ul>
+                                <?php else: ?>
+                                    No hay productos disponibles.
+                                <?php endif; ?>
                             </td>
                             <td>
                                 <?php 
@@ -121,12 +130,6 @@ MostrarMenu();
     <?php endif; ?>
 </script>
 
-<script src="assets/vendor/jquery/dist/jquery.min.js"></script>
-<script src="assets/vendor/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-<script src="assets/vendor/js-cookie/js.cookie.js"></script>
-<script src="assets/vendor/jquery.scrollbar/jquery.scrollbar.min.js"></script>
-<script src="assets/vendor/jquery-scroll-lock/dist/jquery-scrollLock.min.js"></script>
-<script src="assets/js/argon.js?v=1.2.0"></script>
 </body>
 
 </html>

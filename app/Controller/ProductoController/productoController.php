@@ -29,9 +29,7 @@ class ProductoController {
 
     public function buscarProductoPorId($idProducto) {
         try {
-            // Si usas MongoDB, asegúrate de convertir el ID a un ObjectId
-            $objectId = new ObjectId($idProducto); // Convertir a ObjectId si usas MongoDB
-            return $this->productoModel->obtenerProductoPorId($objectId);
+            return $this->productoModel->obtenerProductoPorId($idProducto);
         } catch (Exception $e) {
             $_SESSION['mensaje'] = "Error al buscar el producto: " . $e->getMessage();
             return null;
@@ -43,7 +41,7 @@ class ProductoController {
     public function crearProducto($nombre_producto, $descripcion, $precio, $stock, $idCategoria, $rutaImagen) {
         try {
             $producto = [
-                'id_producto' => new ObjectId(),
+                'id_producto' => time(),
                 'nombre_producto' => $nombre_producto,
                 'descripcion' => $descripcion,
                 'precio' => (float)$precio,
@@ -73,7 +71,7 @@ class ProductoController {
                 'ruta_imagen' => $rutaImagen
             ];
     
-            if ($this->productoModel->actualizarProducto(new ObjectId($idProducto), $productoActualizado)) {
+            if ($this->productoModel->actualizarProducto($idProducto, $productoActualizado)) {
                 $_SESSION['mensaje'] = "Producto actualizado exitosamente.";
             } else {
                 $_SESSION['mensaje'] = "Error al actualizar el producto.";
@@ -91,7 +89,7 @@ class ProductoController {
             }
     
             // Pasar ObjectId a eliminar el producto
-            if ($this->productoModel->eliminarProducto(new ObjectId($idProducto))) {
+            if ($this->productoModel->eliminarProducto($idProducto)) {
                 $_SESSION['mensaje'] = "Producto eliminado exitosamente.";
             } else {
                 $_SESSION['mensaje'] = "Error al eliminar el producto.";

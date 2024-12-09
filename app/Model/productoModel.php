@@ -74,7 +74,7 @@ class ProductoModel {
 
             // Usar ObjectId para el filtro
             $productosCollection->updateOne(
-                ['id_producto' => $idProducto], // No convertir a int, mantén el ObjectId
+                ['id_producto' => (int)$idProducto], // No convertir a int, mantén el ObjectId
                 ['$set' => $productoActualizado] // Datos a actualizar
             );
             return true;
@@ -91,11 +91,8 @@ class ProductoModel {
                 return null;
             }
 
-            // Convertir id_producto a ObjectId si es necesario
-            $objectId = new ObjectId($idProducto);
-
             $productosCollection = $db->productos;
-            $producto = $productosCollection->findOne(['id_producto' => $objectId]); // Buscar por ObjectId
+            $producto = $productosCollection->findOne(['id_producto' => (int)$idProducto]); // Buscar por ObjectId
 
             if ($producto) {
                 return [
@@ -127,7 +124,7 @@ class ProductoModel {
             $productosCollection = $db->productos;
     
             // Usar ObjectId para eliminar
-            $productosCollection->deleteOne(['id_producto' => $idProducto]); // Eliminar por ObjectId
+            $productosCollection->deleteOne(['id_producto' => (int)$idProducto]); // Eliminar por ObjectId
             return true;
         } catch (\Exception $e) {
             return false;

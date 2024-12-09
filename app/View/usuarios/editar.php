@@ -22,7 +22,6 @@ $usuario = $usuarioModel->editarUsuario($_GET['id']);
 
 
 ?>
-?>
 <!DOCTYPE html>
 <html>
 <?php 
@@ -39,7 +38,6 @@ HeadCSS();
 <?php 
 MostrarNav();
 MostrarMenu();
-print_r($_GET);
 ?>
 <div class="container mt-4">
     <form role="form" method="POST" id="editarUsuario">

@@ -36,7 +36,7 @@ unset($_SESSION['mensaje']);
                 <table class="table table-bordered table-striped">
                     <thead>
                         <tr>
-                            <th>ID</th>
+                            <th>Img</th>
                             <th>Nombre</th>
                             <th>Descripción</th>
                             <th>Precio</th>
@@ -48,7 +48,11 @@ unset($_SESSION['mensaje']);
                     <tbody>
                         <?php foreach ($productos as $producto): ?>
                             <tr>
-                                <td><?php echo htmlspecialchars($producto['id_producto']); ?></td>
+                                <td>
+                                    <img src="<?php echo htmlspecialchars($producto['ruta_imagen']); ?>" 
+                                            alt="<?php echo htmlspecialchars($producto['nombre_producto']); ?>" 
+                                            style="width: 50px; height: 50px; object-fit: cover;"/>
+                                </td>
                                 <td><?php echo htmlspecialchars($producto['nombre_producto']); ?></td>
                                 <td><?php echo htmlspecialchars($producto['descripcion']); ?></td>
                                 <td><?php echo htmlspecialchars($producto['precio']); ?></td>

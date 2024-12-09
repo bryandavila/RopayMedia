@@ -7,6 +7,7 @@ if (session_status() === PHP_SESSION_NONE) {
 }
 
 
+
 $reporteController = new reporteController();
 $reportes = $reporteController->top10clientes();
 $cont=1;

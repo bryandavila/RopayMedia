@@ -15,57 +15,30 @@
                 if ($db === null) {
                     return [];
                 }
-                
-                $facturasCollection = $db->facturas; 
-                $facturas = $facturasCollection->find(['id_cliente'=>$id_usuario]); 
-                
+        
+                $facturasCollection = $db->facturas;
+                $facturas = $facturasCollection->find(['id_usuario' => (int)$id_usuario]);
+        
                 $listaFacturas = [];
                 foreach ($facturas as $factura) {
-                    $fechaEmision = null;
-                    if (isset($factura['fecha_emision']) && !empty($factura['fecha_emision'])) {
-                        $fechaEmision = $factura['fecha_emision']; // Mantén el formato como string
-                    } else {
-                        $fechaEmision = null; 
-                    }
-                   
-
-                    $productosDetalles = [];
-
-                if (isset($factura['productos']) && $factura['productos'] instanceof MongoDB\Model\BSONArray) {
-                   
-                    $productosIDs = $factura['productos']->getArrayCopy();
-
-                    $productosCollection = $db->productos; 
-                    $productos = $productosCollection->find(['id_producto' => ['$in' => $productosIDs]]);
-                    
-                    foreach ($productos as $producto) {
-                        $productosDetalles[] = [
-                            '' => $producto['nombre_producto'] ?? 'Sin nombre',
-                        ];
-                    }
-                
-                     $producto = json_encode($productosDetalles);
-                     $producto = preg_replace( ['/:/','/\[|\]/', '/\{/', '/\}/', '/","/', '/"/', '/, /'], 
-                     ['','', '', '', "\n", '', ', '],$producto);
-                     $listaFacturas[] = [
-                        'id_factura' => isset($factura['id_factura']) ? (int)$factura['id_factura'] : null,
-                        'id_pedido' => isset($factura['id_pedido']) ? (int)$factura['id_pedido'] : null, // Verificar existencia
-                        'id_cliente' => isset($factura['id_cliente']) ? (int)$factura['id_cliente'] : null, // Verificar existencia
-                       'productos' =>  nl2br($producto),
-                        'total' => isset($factura['total']) ? (float)$factura['total'] : null, // Verificar existencia
-                        'fecha_emision' => $fechaEmision,
-                        'detalle' => isset($factura['detalle']) ? $factura['detalle'] : null // Verificar existencia
+                    $listaFacturas[] = [
+                        'id_factura' => $factura['id_factura'] ?? null,
+                        'id_pedido' => $factura['id_pedido'] ?? null,
+                        'id_cliente' => $factura['id_usuario'] ?? null,
+                        'productos' => $factura['productos'] ?? [],
+                        'total' => $factura['total'] ?? 0,
+                        'fecha_emision' => $factura['fecha_emision'] ?? null,
+                        'detalle' => $factura['detalle'] ?? null,
                     ];
                 }
-            }
+        
                 return $listaFacturas;
-                
         
             } catch (\Exception $e) {
                 return [];
             }
-        
         }
+        
 
         public function gananciasmesuales(){
             try{
@@ -168,7 +141,7 @@
                 $clienteDetalles = [];
                 foreach ($facturas as $factura) {         
                     $usuariosCollection = $db->usuarios; 
-                    $usuarios = $usuariosCollection->find(['_id' => $factura['id_cliente']]); 
+                    $usuarios = $usuariosCollection->find(['_id' => $factura['id_usuario']]); 
                     foreach ($usuarios as $usuario) {  
 
                             if (array_key_exists($usuario['correo'], $clienteDetalles)){

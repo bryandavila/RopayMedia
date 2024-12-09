@@ -7,9 +7,6 @@ require_once $_SERVER['DOCUMENT_ROOT'] . "/RopayMedia/app/Model/carrito_comprasM
 
 class FacturaController {
     private $facturaModel;
-  
-
-
 
     public function __construct() {
         $this->facturaModel = new FacturaModel();
@@ -23,43 +20,40 @@ class FacturaController {
         
     }
 
-   
     public function crearFactura($idUsuario, $idPedido, $productos, $total,$detalle) {
         $idPedido = $this->crearPedido($idUsuario, $productos, $total, $detalle);
         $fechaEmision = date("Y-m-d H:i:s");
-       // Validar y estructurar los productos
-    $productosFactura = [];
-    foreach ($productos as $producto) {
-        $productosFactura[] = [
-            'id_producto' => (int)$producto['id_producto'],
-            'nombre' => $producto['nombre'],
-            'cantidad' => (int)$producto['cantidad'],
-            'precio' => (float)$producto['precio'],
+        $productosFactura = [];
+        foreach ($productos as $producto) {
+            $productosFactura[] = [
+                'id_producto' => $producto['id_producto'],
+                'nombre' => $producto['nombre'],
+                'cantidad' => (int)$producto['cantidad'],
+                'precio' => (float)$producto['precio'],
+            ];
+        }
+
+        $factura = [
+            'id_factura' => time(),
+            'id_usuario' => (int)$idUsuario,
+            'id_pedido' => (int)$idPedido,
+            'productos' => $productosFactura, 
+            'total' => (float)$total,
+            'fecha_emision' => $fechaEmision,
+            'detalle' => $detalle,
         ];
+
+        if ($this->facturaModel->crearFactura($factura)) {
+            $this->actualizarStockDeProductos($productosFactura);
+            
+            $_SESSION['mensaje'] = "Factura creada exitosamente.";
+            return true;
+        } else {
+            $_SESSION['mensaje'] = "Error al crear la factura.";
+            return false;
+        }
     }
 
-    // Estructurar la factura
-    $factura = [
-        'id_factura' => time(),
-        'id_usuario' => (int)$idUsuario,
-        'id_pedido' => (int)$idPedido,
-        'productos' => $productosFactura, 
-        'total' => (float)$total,
-        'fecha_emision' => $fechaEmision,
-        'detalle' => $detalle,
-    ];
-
-    // Insertar la factura
-    if ($this->facturaModel->crearFactura($factura)) {
-        $this->actualizarStockDeProductos($productos);
-        
-        $_SESSION['mensaje'] = "Factura creada exitosamente.";
-        return true;
-    } else {
-        $_SESSION['mensaje'] = "Error al crear la factura.";
-        return false;
-    }
-}
     public function actualizarFactura($idFactura, $idUsuario, $idPedido, $productos, $total, $fechaEmision,$detalle) {
         $facturaActualizada = [
             'id_usuario' => (int)$idUsuario,
@@ -68,7 +62,7 @@ class FacturaController {
             'total' => (float)$total,
            'fecha_emision' => $fechaEmision, // Almacenar como una cadena
            'detalle' => $detalle 
-    ];
+        ];
     
         if ($this->facturaModel->actualizarFactura($idFactura, $facturaActualizada)) {
             $_SESSION['mensaje'] = "Factura actualizada exitosamente.";
@@ -89,6 +83,7 @@ class FacturaController {
             $_SESSION['mensaje'] = "Error al eliminar la factura.";
         }
     }
+
     public function obtenerProductos() {
         try {
             $productosController = new productoController(); 
@@ -99,6 +94,7 @@ class FacturaController {
             return []; 
         }
     }
+    
     public function crearPedido($idUsuario, $productos, $total, $detalle) {
         $db = (new Conexion())->conectar(); 
         if ($db === null) {
@@ -125,35 +121,37 @@ class FacturaController {
         } else {
             $_SESSION['mensaje'] = "Error al crear el pedido.";
             return null;  // Retorna null si hubo un error
-        } }
-        private function actualizarStockDeProductos($productos) {
-            $db = (new Conexion())->conectar();
-            if ($db === null) {
-                $_SESSION['mensaje'] = "Error al conectar a la base de datos.";
-                return;
-            }
-            $productosCollection = $db->productos;
-            foreach ($productos as $producto) {
-        $productoId = new MongoDB\BSON\ObjectId($producto['id_producto']);
-        $cantidadVendida = (int)$producto['cantidad'];
-        $productoData = $productosCollection->findOne(['id_producto' => $productoId]);
-        if (!$productoData) {
-            $_SESSION['mensaje'] = "Producto con ID $productoId no encontrado.";
+        } 
+    }
+    
+    private function actualizarStockDeProductos($productos) {
+        $db = (new Conexion())->conectar();            
+        if ($db === null) {
+            $_SESSION['mensaje'] = "Error al conectar a la base de datos.";
             return;
         }
-        if ($productoData['stock'] < $cantidadVendida) {
-            $_SESSION['mensaje'] = "No hay suficiente stock para el producto " . $producto['nombre'];
-            return;  
+        $productosCollection = $db->productos;
+        foreach ($productos as $producto) {
+            $productoId = (int)$producto['id_producto'];
+            $cantidadVendida = (int)$producto['cantidad'];
+            $productoData = $productosCollection->findOne(['id_producto' => $productoId]);
+            if (!$productoData) {
+                $_SESSION['mensaje'] = "Producto con ID $productoId no encontrado.";
+                return;
+            }
+            if ($productoData['stock'] < $cantidadVendida) {
+                $_SESSION['mensaje'] = "No hay suficiente stock para el producto " . $producto['nombre'];
+                return;  
+            }
+
+            $productosCollection->updateOne(
+                ['id_producto' => $productoId],
+                ['$inc' => ['stock' => -$cantidadVendida]] 
+            );
+
+            error_log("Stock actualizado para producto ID: $productoId, nuevo stock: " . ($productoData['stock'] - $cantidadVendida));
         }
-
-        $productosCollection->updateOne(
-            ['id_producto' => $productoId],
-            ['$inc' => ['stock' => -$cantidadVendida]] 
-        );
-
-        error_log("Stock actualizado para producto ID: $productoId, nuevo stock: " . ($productoData['stock'] - $cantidadVendida));
     }
-}
 
     public function manejarAcciones() {
         $accion = isset($_POST['accion']) ? $_POST['accion'] : '';
@@ -194,7 +192,8 @@ class FacturaController {
                 exit();
             }
         }
-    }}
+    }
+}
     
     
 ?>

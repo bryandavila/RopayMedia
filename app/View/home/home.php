@@ -69,48 +69,50 @@
         <?php else: ?>
             <div class="row">
                 <?php foreach ($productos as $producto): ?>
-                    <div class="col-lg-4 col-md-6 mb-4 d-flex align-items-stretch">
-                        <div class="card h-100" style="width: 18rem; position: relative;">
-                            <img src="<?php echo htmlspecialchars($producto['ruta_imagen']); ?>" 
-                                class="card-img-top" 
-                                alt="<?php echo htmlspecialchars($producto['nombre_producto']); ?>" 
-                                style="object-fit: cover; height: 250px;">
-                            <div class="card-body d-flex flex-column">
-                                <h5 class="card-title"><?php echo htmlspecialchars($producto['nombre_producto']); ?></h5>
-                                <p class="card-text mt-auto">
-                                    <strong>Precio:</strong> ₡<?php echo number_format($producto['precio'], 2); ?><br>
-                                    <strong>Stock:</strong> <?php echo $producto['stock']; ?>
-                                </p>
-                            </div>
-                            <div class="card-footer">
-                                <form method="POST" action="/RopayMedia/app/Controller/CarritoComprasController/carrito_controller.php?action=agregarAlCarrito">
-                                    <input type="hidden" name="id_producto" value="<?php echo $producto['id_producto']; ?>">
-                                    <input type="hidden" name="img" value="<?php echo htmlspecialchars($producto['ruta_imagen']); ?>">
-                                    <input type="hidden" name="nombre" value="<?php echo htmlspecialchars($producto['nombre_producto']); ?>">
-                                    <input type="hidden" name="precio" value="<?php echo number_format($producto['precio'], 2, '.', ''); ?>">
-                                    <input type="hidden" name="stock" value="<?php echo $producto['stock']; ?>">
-                                    <button type="submit" class="btn btn-success btn-block">Añadir al carrito</button>
-                                </form>
-                                <button type="button" class="btn btn-info btn-block mt-2" data-toggle="collapse" 
-                                        data-target="#detalle-<?php echo $producto['id_producto']; ?>" 
-                                        aria-expanded="false" 
-                                        aria-controls="detalle-<?php echo $producto['id_producto']; ?>">
-                                    Ver más
-                                </button>
-                            </div>
-                            <!-- Contenedor del colapso -->
-                            <div id="detalle-<?php echo $producto['id_producto']; ?>" 
-                                class="collapse position-absolute w-100" 
-                                style="z-index: 10; background-color: white; border: 1px solid #ddd; padding: 15px;">
-                                <h5>Descripción del Producto</h5>
-                                <p><?php echo htmlspecialchars($producto['descripcion']); ?></p>
-                                <button type="button" class="btn btn-secondary btn-block" data-toggle="collapse" 
-                                        data-target="#detalle-<?php echo $producto['id_producto']; ?>">
-                                    Cerrar
-                                </button>
+                    <?php if ($producto['stock'] > 0): ?>
+                        <div class="col-lg-4 col-md-6 mb-4 d-flex align-items-stretch">
+                            <div class="card h-100" style="width: 18rem; position: relative;">
+                                <img src="<?php echo htmlspecialchars($producto['ruta_imagen']); ?>" 
+                                    class="card-img-top" 
+                                    alt="<?php echo htmlspecialchars($producto['nombre_producto']); ?>" 
+                                    style="object-fit: cover; height: 250px;">
+                                <div class="card-body d-flex flex-column">
+                                    <h5 class="card-title"><?php echo htmlspecialchars($producto['nombre_producto']); ?></h5>
+                                    <p class="card-text mt-auto">
+                                        <strong>Precio:</strong> ₡<?php echo number_format($producto['precio'], 2); ?><br>
+                                        <strong>Stock:</strong> <?php echo $producto['stock']; ?>
+                                    </p>
+                                </div>
+                                <div class="card-footer">
+                                    <form method="POST" action="/RopayMedia/app/Controller/CarritoComprasController/carrito_controller.php?action=agregarAlCarrito">
+                                        <input type="hidden" name="id_producto" value="<?php echo $producto['id_producto']; ?>">
+                                        <input type="hidden" name="img" value="<?php echo htmlspecialchars($producto['ruta_imagen']); ?>">
+                                        <input type="hidden" name="nombre" value="<?php echo htmlspecialchars($producto['nombre_producto']); ?>">
+                                        <input type="hidden" name="precio" value="<?php echo number_format($producto['precio'], 2, '.', ''); ?>">
+                                        <input type="hidden" name="stock" value="<?php echo $producto['stock']; ?>">
+                                        <button type="submit" class="btn btn-success btn-block">Añadir al carrito</button>
+                                    </form>
+                                    <button type="button" class="btn btn-info btn-block mt-2" data-toggle="collapse" 
+                                            data-target="#detalle-<?php echo $producto['id_producto']; ?>" 
+                                            aria-expanded="false" 
+                                            aria-controls="detalle-<?php echo $producto['id_producto']; ?>">
+                                        Ver más
+                                    </button>
+                                </div>
+                                <!-- Contenedor del colapso -->
+                                <div id="detalle-<?php echo $producto['id_producto']; ?>" 
+                                    class="collapse position-absolute w-100" 
+                                    style="z-index: 10; background-color: white; border: 1px solid #ddd; padding: 15px;">
+                                    <h5>Descripción del Producto</h5>
+                                    <p><?php echo htmlspecialchars($producto['descripcion']); ?></p>
+                                    <button type="button" class="btn btn-secondary btn-block" data-toggle="collapse" 
+                                            data-target="#detalle-<?php echo $producto['id_producto']; ?>">
+                                        Cerrar
+                                    </button>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    <?php endif; ?>
                 <?php endforeach; ?>
             </div>
         <?php endif; ?>
