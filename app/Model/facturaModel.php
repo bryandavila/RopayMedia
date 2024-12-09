@@ -28,13 +28,13 @@
                             } else {
                                 $fechaEmision = null; // O algún valor predeterminado
                             }
-                                                
+
                             $listaFacturas[] = [
                                 'id_factura' => isset($factura['id_factura']) && $factura['id_factura'] instanceof MongoDB\BSON\ObjectId ? (string)$factura['id_factura'] : (int)$factura['id_factura'],
                                 'id_pedido' => isset($factura['id_pedido']) && $factura['id_pedido'] instanceof MongoDB\BSON\ObjectId
                                 ? (string)$factura['id_pedido'] : (int)$factura['id_pedido'], 
                                 'id_usuario' => isset($factura['id_usuario']) ? (int)$factura['id_usuario'] : null, // Verificar existencia
-                                'productos' => isset($factura['productos']) ? $factura['productos'] : [], // Solo IDs de productos
+                                'productos' => $factura['productos'], // Detalles de productos
                                 'total' => isset($factura['total']) ? (float)$factura['total'] : null, // Verificar existencia
                                 'fecha_emision' => $fechaEmision,
                                 'detalle' => isset($factura['detalle']) ? $factura['detalle'] : null // Verificar existencia
@@ -55,13 +55,7 @@
             if ($db === null) {
                 return false;
             }
-            
-            if (isset($factura['productos']) && is_array($factura['productos'])) {
-                $factura['productos'] = array_map(function($producto) {
-                    return (int)$producto; // Convertir los IDs a enteros
-                }, $factura['productos']);
-            }
-    
+        
             $facturasCollection = $db->facturas;
             $facturasCollection->insertOne($factura);
             return true;
@@ -97,26 +91,38 @@
             }
     
             $facturasCollection = $db->facturas;
-            $factura = $facturasCollection->findOne(['id_factura' => (int)$idFactura]); // Buscar por ID
+            $factura = $facturasCollection->findOne(['id_factura' => (int)$idFactura]);
     
             if ($factura) {
+               $productos = isset($factura['productos']) && $factura['productos'] instanceof MongoDB\Model\BSONArray
+               ? iterator_to_array($factura['productos']) 
+               : [];
+               // Mapear los productos
+               $productos = array_map(function($producto) {
                 return [
-                    'id_factura' => isset($factura['id_factura']) ? (int)$factura['id_factura'] : null, // Verificar existencia
+                'id_producto' => isset($producto['id_producto']) ? $producto['id_producto'] : null,
+                'nombre' => isset($producto['nombre']) ? $producto['nombre'] : null,
+                'cantidad' => isset($producto['cantidad']) ? $producto['cantidad'] : 1,  // Valor predeterminado si no existe cantidad
+                'precio' => isset($producto['precio']) ? $producto['precio'] : 0.0, // Valor predeterminado si no existe precio
+                ];
+            }, $productos);
+                return [
+                    'id_factura' => isset($factura['id_factura']) ? (int)$factura['id_factura'] : null, 
                     'id_usuario' => isset($factura['id_usuario']) ? $factura['id_usuario'] : null,
                     'id_pedido' => isset($factura['id_pedido']) ? 
                     (is_object($factura['id_pedido']) && $factura['id_pedido'] instanceof MongoDB\BSON\ObjectId 
                         ? (string)$factura['id_pedido']  // Convertir ObjectId a string
                         : $factura['id_pedido']) 
                     : null, 
-                    'productos' => isset($factura['productos']) ? $factura['productos'] : [], // Verificar existencia
+                    'productos' => $productos, 
                     'fecha_emision' => isset($factura['fecha_emision']) && $factura['fecha_emision'] instanceof MongoDB\BSON\UTCDateTime
                         ? $factura['fecha_emision']->toDateTime()->format('Y-m-d H:i:s') // Convertir a cadena legible
-                        : $factura['fecha_emision'], // Dejar tal cual si no es UTCDateTime
-                    'total' => isset($factura['total']) ? $factura['total'] : null, // Verificar existencia
-                   'detalle' => isset($factura['detalle']) ? $factura['detalle'] : null // Verificar existencia
+                        : $factura['fecha_emision'], 
+                    'total' => isset($factura['total']) ? $factura['total'] : null, 
+                   'detalle' => isset($factura['detalle']) ? $factura['detalle'] : null 
             ];
             }
-            return null; // Si no se encuentra la factura
+            return null; 
         } catch (Exception $e) {
             // Manejo de errores
             error_log("Error al obtener la factura: " . $e->getMessage());

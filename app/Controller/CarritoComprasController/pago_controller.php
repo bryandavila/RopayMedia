@@ -60,30 +60,7 @@
                 if ($resultado) {
                     echo json_encode(['success' => true, 'message' => 'Pedido realizado exitosamente.']);
                 } 
-                /*
-                $id_pedido = $pedido->crearPedido($id_usuario, $metodo_retiro, $direccion, $productos, $total, $img_sinpe);
-                if ($id_pedido) {
-                    // Crear factura con el id_pedido
-                    $factura_id = $pedido->crearFactura($id_usuario, $id_pedido, $productos, $total);
-    
-                    if ($factura_id) {
-                        echo json_encode([
-                            'success' => true,
-                            'message' => 'Pedido y factura creados exitosamente.',
-                            'factura_id' => $factura_id
-                        ]);
-                    } else {
-                        echo json_encode([
-                            'success' => false,
-                            'message' => 'Error al generar la factura.'
-                        ]);
-                    }
-                } else {
-                    echo json_encode([
-                        'success' => false,
-                        'message' => 'Error al crear el pedido.'
-                    ]);
-                } */
+               
             }
         }
     }
