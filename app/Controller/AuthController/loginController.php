@@ -13,7 +13,7 @@
         $login_result = $usuario->login($correo, $contrasena);
 
         if ($login_result !== false) {
-            $_SESSION['id_usuario'] = $login_result['id_usuario'];
+            $_SESSION['id_usuario'] = $login_result['_id'];
             $_SESSION['id_rol'] = $login_result['id_rol'];
             $_SESSION['nombre'] = $login_result['nombre'];
             $_SESSION['apellido'] = $login_result['apellido'];

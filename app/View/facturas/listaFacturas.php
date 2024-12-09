@@ -1,18 +1,16 @@
 <?php
+session_start();
+
+require_once $_SERVER['DOCUMENT_ROOT'] . "/RopayMedia/app/Controller/FacturaController/facturas_controller.php";
 include_once '../layout.php';
 
-include_once '../../Controller/ReporteController/reporteController.php';
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
+$facturaController = new FacturaController();
+$facturas = $facturaController->listarFacturas(); 
 
-
-$nombreUsuario = isset($_SESSION['nombre']) ? $_SESSION['nombre'] : '';
-$reporteController = new reporteController();
-$reportes = $reporteController->obtenerComprasUsuario($_SESSION['id_usuario']);
-
+$mensaje = isset($_SESSION['mensaje']) ? $_SESSION['mensaje'] : '';
+$tipo = isset($_SESSION['tipo']) ? $_SESSION['tipo'] : 'success';
+unset($_SESSION['mensaje'], $_SESSION['tipo']); 
 ?>
-
 
 <!DOCTYPE html>
 <html>
@@ -29,7 +27,7 @@ MostrarMenu();
 ?>
 
 <div class="container mt-5">
-    <h1 class="text-center mb-4">Mis Compras</h1>
+    <h1 class="text-center mb-4">Lista de Facturas</h1>
 
     <?php if (!empty($mensaje)): ?>
         <div class="alert alert-<?php echo $tipo; ?>" role="alert">
@@ -37,52 +35,53 @@ MostrarMenu();
         </div>
     <?php endif; ?>
     
-    <!-- Tabla de reportes -->
+    <!-- Tabla de Facturas -->
     <div class="card mb-4">
         <div class="card-header bg-primary text-white">
-            <h4 class="mb-0">Compras realizadas</h4>
+            <h4 class="mb-0">Facturas Creadas</h4>
         </div>
         <div class="card-body">
             <table class="table table-striped">
                 <thead>
                     <tr>
                         <th>#</th>
+                        <th>Cliente</th>
                         <th>Numero de Pedido</th>
-                        <th>Productos</th>
                         <th>Total</th>
-                        <th>Fecha de reporte</th>
-                     
+                        <th>Fecha de Factura</th>
+                        <th>Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
-                <?php if (!empty($reportes)): ?>
-                    <?php foreach ($reportes as $index => $reporte): ?>
+                <?php if (!empty($facturas)): ?>
+                    <?php foreach ($facturas as $index => $factura): ?>
                         <tr>
                             <td><?php echo $index + 1; ?></td>
-                            
                             <td>
                                 <?php 
-                                echo isset($reporte['id_pedido']) 
-                                    ? htmlspecialchars($reporte['id_pedido']) 
+                                echo isset($factura['id_usuario']) 
+                                    ? htmlspecialchars($factura['id_usuario']) 
+                                    : 'Cliente no disponible'; 
+                                ?>
+                            </td>
+                            <td>
+                                <?php 
+                                echo isset($factura['id_pedido']) 
+                                    ? htmlspecialchars($factura['id_pedido']) 
                                     : 'Pedido no disponible'; 
                                 ?>
                             </td>
                             <td>
-                            <?php                             
-                                print_r($reporte['productos']);
-                                ?>
-                            </td>
-                            <td>
                                 <?php 
-                                echo isset($reporte['total']) 
-                                    ? htmlspecialchars(number_format($reporte['total'], 2)) 
+                                echo isset($factura['total']) 
+                                    ? htmlspecialchars(number_format($factura['total'], 2)) 
                                     : 'Total no disponible'; 
                                 ?>
                             </td>
                             <td>
                                 <?php 
-                               if (!empty($reporte['fecha_emision'])) {
-                                $fecha = DateTime::createFromFormat('Y-m-d H:i:s', $reporte['fecha_emision']);
+                               if (!empty($factura['fecha_emision'])) {
+                                $fecha = DateTime::createFromFormat('Y-m-d H:i:s', $factura['fecha_emision']);
                                 if ($fecha) {
                                     echo htmlspecialchars($fecha->format('d-m-Y H:i:s')); // Formato deseado en la vista
                                 } else {
@@ -94,12 +93,18 @@ MostrarMenu();
                             ?>
                                
                             </td>
-                           
+                            <td>
+                                <form method="POST" action="facturasCrud.php" class="d-inline">
+                                    <input type="hidden" name="id_factura" value="<?php echo htmlspecialchars($factura['id_factura']); ?>">
+                                    <button type="submit" name="accion" value="Eliminar" class="btn btn-danger btn-sm">Eliminar</button>
+                                </form>
+                                <a href="facturaVista.php?id_factura=<?php echo htmlspecialchars($factura['id_factura']); ?>" class="btn btn-warning btn-sm">Ver</a>
+                            </td>
                         </tr>
                     <?php endforeach; ?>
                 <?php else: ?>
                     <tr>
-                        <td colspan="6" class="text-center">No hay reportes registradas.</td>
+                        <td colspan="6" class="text-center">No hay facturas registradas.</td>
                     </tr>
                 <?php endif; ?>
                 </tbody>

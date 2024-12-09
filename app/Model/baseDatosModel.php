@@ -5,12 +5,17 @@ class Conexion {
     public function conectar() {
         try {
             $servidor = "127.0.0.1";
-            $usuario = "admindb";
-            $password = "123456";
+            
+            $usuario = "";
+            $password = "";
+            //Estasa son tus credenciales jouse
+            //$usuario = "root";
+            //$password = "132456";
+
             $baseDatos = "RopayMedia";
             $puerto = "27017";
 
-            $cadenaConexion = "mongodb://{$usuario}:{$password}@127.0.0.1:27017/{$baseDatos}";
+            $cadenaConexion = "mongodb://127.0.0.1:27017/" . $baseDatos;
             //$cadenaConexion = "mongodb://127.0.0.1:27017/" . $baseDatos;
 
             $cliente = new MongoDB\Client($cadenaConexion);

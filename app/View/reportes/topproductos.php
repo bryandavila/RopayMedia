@@ -1,16 +1,14 @@
 <?php
 include_once '../layout.php';
-
 include_once '../../Controller/ReporteController/reporteController.php';
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
 
-$nombreUsuario = isset($_SESSION['nombre']) ? $_SESSION['nombre'] : '';
 $reporteController = new reporteController();
-$reportes = $reporteController->obtenerComprasUsuario($_SESSION['id_usuario']);
-
+$reportes = $reporteController->top10productos();
+$cont=1;
 ?>
 
 
@@ -29,7 +27,7 @@ MostrarMenu();
 ?>
 
 <div class="container mt-5">
-    <h1 class="text-center mb-4">Mis Compras</h1>
+    <h1 class="text-center mb-4">Reporte de los 10 productos mas vendidos</h1>
 
     <?php if (!empty($mensaje)): ?>
         <div class="alert alert-<?php echo $tipo; ?>" role="alert">
@@ -40,66 +38,49 @@ MostrarMenu();
     <!-- Tabla de reportes -->
     <div class="card mb-4">
         <div class="card-header bg-primary text-white">
-            <h4 class="mb-0">Compras realizadas</h4>
+            <h4 class="mb-0">reportes Creadas</h4>
         </div>
         <div class="card-body">
             <table class="table table-striped">
                 <thead>
                     <tr>
                         <th>#</th>
-                        <th>Numero de Pedido</th>
-                        <th>Productos</th>
-                        <th>Total</th>
-                        <th>Fecha de reporte</th>
-                     
+                        <th>Año / Mes</th>
+                        <th>Total ventas</th>
+                       
                     </tr>
                 </thead>
                 <tbody>
                 <?php if (!empty($reportes)): ?>
+                    
                     <?php foreach ($reportes as $index => $reporte): ?>
+                        
                         <tr>
-                            <td><?php echo $index + 1; ?></td>
-                            
+                        <td><?php echo $cont++; ?></td>
                             <td>
-                                <?php 
-                                echo isset($reporte['id_pedido']) 
-                                    ? htmlspecialchars($reporte['id_pedido']) 
-                                    : 'Pedido no disponible'; 
-                                ?>
-                            </td>
-                            <td>
-                            <?php                             
-                                print_r($reporte['productos']);
-                                ?>
-                            </td>
-                            <td>
-                                <?php 
-                                echo isset($reporte['total']) 
-                                    ? htmlspecialchars(number_format($reporte['total'], 2)) 
-                                    : 'Total no disponible'; 
-                                ?>
-                            </td>
-                            <td>
-                                <?php 
-                               if (!empty($reporte['fecha_emision'])) {
-                                $fecha = DateTime::createFromFormat('Y-m-d H:i:s', $reporte['fecha_emision']);
-                                if ($fecha) {
-                                    echo htmlspecialchars($fecha->format('d-m-Y H:i:s')); // Formato deseado en la vista
-                                } else {
-                                    echo 'Formato de fecha inválido';
-                                }
-                            } else {
-                                echo 'Fecha no disponible';
-                            }
+                            <?php                                                    
+                              echo isset($index) 
+                              ? htmlspecialchars($index) 
+                              : 'Pedido no disponible'; 
+                             
                             ?>
-                               
+                            </td>
+                            <td>
+                                <?php 
+                                echo isset($reporte) 
+                                    ? htmlspecialchars($reporte) 
+                                    : 'Pedido no disponible'; 
+                                   
+                                ?>
                             </td>
                            
+                           
                         </tr>
+                    
                     <?php endforeach; ?>
                 <?php else: ?>
                     <tr>
-                        <td colspan="6" class="text-center">No hay reportes registradas.</td>
+                        <td colspan="6" class="text-center">No hay registros.</td>
                     </tr>
                 <?php endif; ?>
                 </tbody>

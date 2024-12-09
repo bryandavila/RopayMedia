@@ -63,13 +63,13 @@ function MostrarNav()
                         </h6>
                         <ul class="navbar-nav">
                             <li class="nav-item">
-                                <a class="nav-link" href="#">
+                                <a class="nav-link" href="../categorias/categorias.php">
                                     <i class="ni ni-bullet-list-67 text-primary"></i>
                                     <span class="nav-link-text">Productos por categorías</span>
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="#">
+                                <a class="nav-link" href="../productos/productos.php">
                                     <i class="ni ni-box-2 text-primary"></i>
                                     <span class="nav-link-text">Todos los productos</span>
                                 </a>
@@ -77,13 +77,13 @@ function MostrarNav()
                             if ($rol == 1) {
                                 echo '
                                 <li class="nav-item">
-                                    <a class="nav-link" href="#">
+                                    <a class="nav-link" href="../productos/productosCrud.php">
                                         <i class="ni ni-box-2 text-primary"></i>
                                         <span class="nav-link-text">Agregar un producto</span>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="#">
+                                    <a class="nav-link" href="../productos/listaProductos.php">
                                         <i class="ni ni-box-2 text-primary"></i>
                                         <span class="nav-link-text">Lista de productos</span>
                                     </a>
@@ -98,32 +98,32 @@ function MostrarNav()
                             </h6>
                             <ul class="navbar-nav">
                                 <li class="nav-item">
-                                    <a class="nav-link" href="#">
+                                    <a class="nav-link" href="../categorias/categoriasCrud.php">
                                         <i class="ni ni-bullet-list-67 text-primary"></i>
                                         <span class="nav-link-text">Crear categoría</span>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="#">
+                                    <a class="nav-link" href="../categorias/listaCategorias.php">
                                         <i class="ni ni-bullet-list-67 text-primary"></i>
                                         <span class="nav-link-text">Lista de categoías</span>
                                     </a>
                                 </li>
                             </ul>
                             <h6 class="navbar-heading p-0 text-muted">
-                                <span class="docs-normal">Clientes</span>
+                                <span class="docs-normal">Usuarios</span>
                             </h6>
                             <ul class="navbar-nav">
                                 <li class="nav-item">
-                                    <a class="nav-link" href="#">
+                                    <a class="nav-link" href="/RopayMedia/app/View/Usuarios/listarUsuarios.php" data-bs-toggle="modal" data-bs-target="#agregarUsuario">
                                         <i class="ni ni-bullet-list-67 text-primary"></i>
-                                        <span class="nav-link-text">Agregar cliente</span>
+                                        <span class="nav-link-text">Agregar Usuario</span>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="#">
+                                    <a class="nav-link" href="/RopayMedia/app/View/Usuarios/listarUsuarios.php">
                                         <i class="ni ni-bullet-list-67 text-primary"></i>
-                                        <span class="nav-link-text">Lista de clientes</span>
+                                        <span class="nav-link-text">Lista de Usuario</span>
                                     </a>
                                 </li>
                             </ul>
@@ -132,19 +132,25 @@ function MostrarNav()
                             </h6>
                             <ul class="navbar-nav">
                                 <li class="nav-item">
-                                    <a class="nav-link" href="#">
+                                    <a class="nav-link" href="../pedidos/listaPedidosEnValidacion.php">
                                         <i class="ni ni-bullet-list-67 text-primary"></i>
-                                        <span class="nav-link-text">Pendientes</span>
+                                        <span class="nav-link-text">En validación</span>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="#">
+                                    <a class="nav-link" href="../pedidos/listaPedidosEnTienda.php">
+                                        <i class="ni ni-bullet-list-67 text-primary"></i>
+                                        <span class="nav-link-text">En la tienda</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="../pedidos/listaPedidosEnProgreso.php">
                                         <i class="ni ni-bullet-list-67 text-primary"></i>
                                         <span class="nav-link-text">En progreso</span>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="#">
+                                    <a class="nav-link" href="../pedidos/listaPedidosEntregados.php">
                                         <i class="ni ni-bullet-list-67 text-primary"></i>
                                         <span class="nav-link-text">Entregados</span>
                                     </a>
@@ -174,7 +180,7 @@ function MostrarNav()
                         </h6>
                         <ul class="navbar-nav">
                             <li class="nav-item">
-                                <a class="nav-link" href="miscompras.php">
+                                <a class="nav-link" href="../reportes/miscompras.php">
                                     <i class="ni ni-bullet-list-67 text-primary"></i>
                                     <span class="nav-link-text">Ver mis compras</span>
                                 </a>
@@ -182,20 +188,22 @@ function MostrarNav()
                             if ($rol == 1) {
                                 echo '
                                 <li class="nav-item">
-                                    <a class="nav-link" href="#">
+                                    <a class="nav-link" href="../reportes/reporteeconomico.php">
                                         <i class="ni ni-box-2 text-primary"></i>
                                         <span class="nav-link-text">Reporte económico</span>
                                     </a>
                                 </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="#">
+                               <li class="nav-item">
+                                    <a class="nav-link" href="../reportes/topproductos.php">
                                         <i class="ni ni-box-2 text-primary"></i>
-                                        <span class="nav-link-text">Top 10 productos(</span>
+                                        <span class="nav-link-text">Top 10 Productos</span>
                                     </a>
-                                </li><li class="nav-item">
-                                    <a class="nav-link" href="#">
+                                </li>
+                            </li>
+                            <li class="nav-item">
+                                    <a class="nav-link" href="../reportes/topclientes.php">
                                         <i class="ni ni-box-2 text-primary"></i>
-                                        <span class="nav-link-text">Top 10 clientes(</span>
+                                        <span class="nav-link-text">Top 10 Clientes</span>
                                     </a>
                                 </li>';
                             }
@@ -222,13 +230,13 @@ function MostrarNav()
                         </h6>
                         <ul class="navbar-nav">
                             <li class="nav-item">
-                                <a class="nav-link" href="#">
+                                <a class="nav-link" href="../categorias/categorias.php">
                                     <i class="ni ni-bullet-list-67 text-primary"></i>
                                     <span class="nav-link-text">Productos por categorías</span>
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="#">
+                                <a class="nav-link" href="../productos/productos.php">
                                     <i class="ni ni-box-2 text-primary"></i>
                                     <span class="nav-link-text">Todos los productos</span>
                                 </a>
@@ -250,18 +258,14 @@ function HeadCSS()
       <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
       <meta name="description" content="Start your development with a Dashboard for Bootstrap 4.">
       <meta name="author" content="Creative Tim">
-      <title>ChillYouKnow</title>
+
+      <title>Ropa y 1/2</title>
       <link rel="icon" href="../assets/img/brand/favicon.png" type="image/png">
       <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700">
-      <link rel="stylesheet" href="../assets/vendor/nucleo/css/nucleo.css" type="text/css">
       <link rel="stylesheet" href="../assets/vendor/@fortawesome/fontawesome-free/css/all.min.css" type="text/css">
       <link rel="stylesheet" href="../assets/css/argon.css?v=1.2.0" type="text/css">
-      <style>
-        .custom-img {
-            height: 400px;
-            object-fit: cover;
-        }
-      </style>
+      <link rel="stylesheet" href="../assets/vendor/nucleo/css/nucleo.css" type="text/css">      
+      <link rel="stylesheet" href="../dist/css/styles.css">   
     </head>';
 }
 
